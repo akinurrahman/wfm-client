@@ -1,0 +1,50 @@
+import {
+  Activity,
+  BarChart3,
+  Bell,
+  CalendarCheck,
+  CalendarDays,
+  CheckSquare,
+  CreditCard,
+  FileText,
+  Folder,
+  FolderKanban,
+  Key,
+  Landmark,
+  LayoutDashboard,
+  Plug,
+  Shield,
+  Star,
+  User,
+  UserCircle,
+  UserPlus,
+  Users,
+  type LucideIcon,
+} from 'lucide-react';
+
+/** Maps the `icon` string on a sidebar item to a real icon component. */
+export const NAV_ICONS: Record<string, LucideIcon> = {
+  Activity,
+  BarChart3,
+  Bell,
+  CalendarCheck,
+  CalendarDays,
+  CheckSquare,
+  CreditCard,
+  FileText,
+  Folder,
+  FolderKanban,
+  Key,
+  Landmark,
+  LayoutDashboard,
+  Plug,
+  Shield,
+  Star,
+  User,
+  UserCircle,
+  UserPlus,
+  Users,
+};
+
+export const resolveNavIcon = (name?: string): LucideIcon =>
+  (name && NAV_ICONS[name]) || Star;

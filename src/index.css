@@ -1,0 +1,344 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource/instrument-serif";
+@import "@fontsource-variable/jetbrains-mono";
+
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+/* ---------- 1. Raw Cyanotype tokens ---------- */
+/* Blueprint drafting. The ground carries the chroma instead of the accent, the
+   accent is chalk, and saturated colour is reserved for status alone - so any
+   colour on screen means something. */
+
+:root {
+  /* surfaces */
+  --bg: oklch(14.8% 0.038 254.0);
+  --surface-1: oklch(18.4% 0.042 253.0);
+  --surface-2: oklch(21.6% 0.046 252.0);
+  --surface-3: oklch(25.4% 0.050 251.0);
+
+  /* lines */
+  --hairline: oklch(92.0% 0.030 220.0 / 0.11);
+  --hairline-strong: oklch(92.0% 0.030 220.0 / 0.19);
+
+  /* table header band — one surface step *above* the panel top, so the row
+     reads as raised chrome. Going below --bg instead just punched a hole. */
+  --table-head: var(--surface-3);
+
+  /* text */
+  --text-hi: oklch(96.0% 0.012 220.0);
+  --text-mid: oklch(74.0% 0.024 226.0);
+  --text-low: oklch(55.5% 0.032 232.0);
+
+  /* accent: chalk on blueprint. High lightness, deliberately low chroma - the
+     ground is already blue, so an equally blue accent would sink into it. */
+  --brand: oklch(91.0% 0.045 210.0);
+  --brand-contrast: oklch(17.0% 0.045 253.0);      /* text on brand */
+  --brand-soft: oklch(91.0% 0.045 210.0 / 0.13);
+  --brand-line: oklch(91.0% 0.045 210.0 / 0.32);
+  --brand-grad-from: oklch(95.5% 0.028 205.0);
+  --brand-grad-to: oklch(87.0% 0.055 213.0);
+
+  /* status. Carries more chroma than the accent on purpose: colour is the one
+     thing here that means something, so it has to read as a different class of
+     thing from the chalk UI. */
+  --green: oklch(78.0% 0.145 168.0);
+  --green-soft: oklch(78.0% 0.145 168.0 / 0.14);
+  --amber: oklch(82.0% 0.135 78.0);
+  --amber-soft: oklch(82.0% 0.135 78.0 / 0.14);
+  --red: oklch(67.0% 0.165 25.0);
+  --red-soft: oklch(67.0% 0.165 25.0 / 0.14);
+
+  /* depth */
+  --lift: 0 16px 48px oklch(8.0% 0.030 253.0 / 0.62);
+  --glow: 0 0 0 1px oklch(91.0% 0.045 210.0 / 0.22), 0 8px 40px oklch(91.0% 0.045 210.0 / 0.09);
+  --card-shine: oklch(96.0% 0.020 215.0 / 0.20);   /* top highlight line on cards */
+  --scrim: oklch(11.0% 0.030 253.0 / 0.62);         /* drawer/dialog overlay, pairs with blur(3px) */
+
+  /* ambient body wash: one cold overhead pool, the drafting lamp */
+  --wash: radial-gradient(1100px 520px at 50% -20%, oklch(91% 0.045 210 / 0.07), transparent 62%);
+
+  /* the drafting grid. Panels are opaque, so it only shows in the gutters and
+     around the page edge, which is the whole point - the sheet under the work. */
+  --grid-line: oklch(91% 0.045 210 / 0.032);
+  --grid-size: 44px;
+
+  /* geometry */
+  --radius: 0.75rem;                  /* 12px — shadcn derives sm/md/lg from this */
+  --radius-panel: 1.125rem;           /* 18px — panels, drawers */
+
+  /* ---------- 2. shadcn variable mapping ---------- */
+  --background: var(--bg);
+  --foreground: var(--text-hi);
+
+  --card: var(--surface-1);
+  --card-foreground: var(--text-hi);
+
+  --popover: var(--surface-2);
+  --popover-foreground: var(--text-hi);
+
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-contrast);
+
+  --secondary: var(--surface-3);
+  --secondary-foreground: var(--text-hi);
+
+  --muted: var(--surface-2);
+  --muted-foreground: var(--text-mid);
+
+  --accent: var(--surface-3);         /* hover tint for menus/lists — NOT the brand */
+  --accent-foreground: var(--text-hi);
+
+  --destructive: var(--red);
+  --destructive-foreground: oklch(17.0% 0.045 253.0);
+
+  --border: var(--hairline);
+  --input: var(--hairline-strong);
+  --ring: var(--brand-line);
+
+  --chart-1: var(--brand);
+  --chart-2: var(--green);
+  --chart-3: var(--text-mid);
+  --chart-4: var(--amber);
+  --chart-5: var(--red);
+
+  /* one step below --bg, not equal to it: the rail is the table edge, the
+     content field is the sheet laid on it */
+  --sidebar: oklch(12.2% 0.034 254.0);
+  --sidebar-foreground: var(--text-mid);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-contrast);
+  --sidebar-accent: var(--surface-3);
+  --sidebar-accent-foreground: var(--text-hi);
+  --sidebar-border: var(--hairline);
+  --sidebar-ring: var(--brand-line);
+}
+
+/* ---------- Light theme ---------- */
+/* The print inverts: on paper the blueprint blue becomes the ink, and the
+   ground goes to cool drafting stock rather than warm cream. */
+
+[data-theme="light"] {
+  /* the ground sits well below the panels on purpose: white sheets laid on a
+     drafting table, not white sheets on more white */
+  --bg: oklch(92.6% 0.017 234.0);
+  --surface-1: oklch(99.4% 0.004 230.0);
+  --surface-2: oklch(98.0% 0.008 231.0);
+  --surface-3: oklch(94.8% 0.014 233.0);
+
+  --hairline: oklch(30.0% 0.055 253.0 / 0.14);
+  --hairline-strong: oklch(30.0% 0.055 253.0 / 0.24);
+
+  /* same surface step in light - lands clear of both the white panel and the
+     page --bg, which a lighter tint could not do in that narrow range */
+  --table-head: var(--surface-3);
+
+  --text-hi: oklch(24.0% 0.045 254.0);
+  --text-mid: oklch(47.0% 0.040 250.0);
+  --text-low: oklch(65.0% 0.030 246.0);
+
+  --brand: oklch(44.0% 0.115 250.0);
+  --brand-contrast: oklch(98.5% 0.006 230.0);
+  --brand-soft: oklch(44.0% 0.115 250.0 / 0.1);
+  --brand-line: oklch(44.0% 0.115 250.0 / 0.38);
+  --brand-grad-from: oklch(52.0% 0.115 252.0);
+  --brand-grad-to: oklch(43.0% 0.118 249.0);
+
+  --green: oklch(50.0% 0.115 162.0);
+  --green-soft: oklch(50.0% 0.115 162.0 / 0.1);
+  --amber: oklch(56.0% 0.115 72.0);
+  --amber-soft: oklch(56.0% 0.115 72.0 / 0.1);
+  --red: oklch(55.0% 0.160 27.0);
+  --red-soft: oklch(55.0% 0.160 27.0 / 0.09);
+
+  --lift: 0 1px 2px oklch(30.0% 0.060 253.0 / 0.06), 0 16px 40px oklch(30.0% 0.060 253.0 / 0.1);
+  --glow: 0 0 0 1px oklch(44.0% 0.115 250.0 / 0.25), 0 8px 40px oklch(44.0% 0.115 250.0 / 0.1);
+  --card-shine: oklch(44.0% 0.115 250.0 / 0.22);  /* ink hairline in light */
+  --scrim: oklch(26.0% 0.050 253.0 / 0.32);
+
+  /* No wash on paper - a light radial on a light ground only ever reads as a
+     smudge. The ground carries itself here. */
+  --wash: none;
+
+  /* Chalk lines on a dark ground disappear into texture; the same lines
+     inverted on paper read as graph paper, so light gets a third of the
+     weight and most of the chroma taken out. */
+  --grid-line: oklch(38.0% 0.045 250.0 / 0.03);
+
+  --sidebar: oklch(90.0% 0.021 236.0);
+
+  --destructive-foreground: oklch(98.5% 0.006 230.0);
+  /* everything else re-resolves through the var() chain automatically */
+}
+
+/* ---------- 3. Expose to Tailwind utilities (v4 @theme) ---------- */
+/* Enables: bg-surface-2, text-mid, border-hairline, shadow-lift, font-serif, etc. */
+
+@theme inline {
+  --font-sans: 'Instrument Sans Variable', sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+  --font-mono: 'JetBrains Mono Variable', monospace;
+
+  /* shadcn-standard names */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Cyanotype-native names (use these in custom components) */
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-table-head: var(--table-head);
+  --color-text-hi: var(--text-hi);
+  --color-text-mid: var(--text-mid);
+  --color-text-low: var(--text-low);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-line: var(--brand-line);
+  --color-brand-contrast: var(--brand-contrast);
+  --color-settled: var(--green);
+  --color-settled-soft: var(--green-soft);
+  --color-awaiting: var(--amber);
+  --color-awaiting-soft: var(--amber-soft);
+  --color-overdue: var(--red);
+  --color-overdue-soft: var(--red-soft);
+
+  /* breakpoints — sidebar goes off-canvas below 960px (DESIGN.md) */
+  --breakpoint-desk: 60rem;
+
+  /* radius scale */
+  --radius-sm: 0.5rem;                /* 8px  — buttons, small controls */
+  --radius-md: 0.75rem;               /* 12px — inputs, cards */
+  --radius-lg: var(--radius-panel);   /* 18px — panels, drawers */
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* shadows */
+  --shadow-lift: var(--lift);
+  --shadow-glow: var(--glow);
+}
+
+/* ---------- 4. Base styles ---------- */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-contrast);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* every numeric element aligns */
+  .tnum,
+  td[data-amount],
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}
+
+/* ---------- 5. Reusable composition classes ---------- */
+
+@layer components {
+  /* The work area. Grid and lamp wash live here rather than on <body> so the
+     sidebar rail stays a flat surface - the texture is what separates the two,
+     alongside the colour step. Paints image layers only, so it composes over
+     whatever background-color the element already carries. */
+  .m-sheet {
+    background-image:
+      var(--wash),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: auto, 100% var(--grid-size), var(--grid-size) 100%;
+    background-repeat: no-repeat, repeat, repeat;
+  }
+
+  /* the standard Cyanotype panel/card surface */
+  .m-panel {
+    position: relative;
+    background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-panel);
+  }
+
+  /* faint top highlight line on cards (dark: chalk shine, light: ink hairline) */
+  .m-panel-shine::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-shine), transparent);
+  }
+
+  /* primary brand button fill */
+  .m-brand-fill {
+    background: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
+    color: var(--brand-contrast);
+    box-shadow: 0 1px 0 oklch(100% 0 89.9 / 0.28) inset, 0 6px 20px var(--brand-soft);
+  }
+}
