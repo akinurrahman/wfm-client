@@ -1,5 +1,6 @@
 export { FilterField } from './components/filter-field';
 export { FilterPopover } from './components/filter-popover';
+export { FilterSelect } from './components/filter-select';
 export { useFilters } from './hooks/use-filters';
 export { defineUrlFilters, pagingSpec, useUrlFilters } from './hooks/use-url-filters';
 export type {

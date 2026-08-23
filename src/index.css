@@ -4,6 +4,10 @@
 @import "@fontsource-variable/instrument-sans";
 @import "@fontsource/instrument-serif";
 @import "@fontsource-variable/jetbrains-mono";
+/* Tailwind v4 follows .gitignore for content detection, so it never looks in
+   node_modules. The form toolkit ships utility classes in its bundle and needs
+   pointing at explicitly or its fields render structurally but unstyled. */
+@source "../node_modules/@akinurrahman/form/dist";
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
@@ -104,13 +108,20 @@
   --chart-4: var(--amber);
   --chart-5: var(--red);
 
-  /* one step below --bg, not equal to it: the rail is the table edge, the
-     content field is the sheet laid on it */
-  --sidebar: oklch(12.2% 0.034 254.0);
+  /* With variant="inset" the sidebar colour stops being a rail and becomes the
+     shell: it paints the whole window, and the content sheet (--bg) is laid on
+     top of it with a margin all round. So it has to sit clearly *below* --bg -
+     at a near match the sheet edge reads as a seam rather than as depth. */
+  --sidebar: oklch(10.4% 0.028 254.0);
   --sidebar-foreground: var(--text-mid);
   --sidebar-primary: var(--brand);
   --sidebar-primary-foreground: var(--brand-contrast);
-  --sidebar-accent: var(--surface-3);
+  /* Nav rows sit straight on the shell with no panel under them, so their
+     fills are translucent chalk rather than a surface step - an opaque
+     --surface-3 pill on this ground reads as a floating box. */
+  --sidebar-hover: oklch(91.0% 0.045 210.0 / 0.055);
+  --sidebar-active: oklch(91.0% 0.045 210.0 / 0.10);
+  --sidebar-accent: var(--sidebar-hover);
   --sidebar-accent-foreground: var(--text-hi);
   --sidebar-border: var(--hairline);
   --sidebar-ring: var(--brand-line);
@@ -121,9 +132,12 @@
    ground goes to cool drafting stock rather than warm cream. */
 
 [data-theme="light"] {
-  /* the ground sits well below the panels on purpose: white sheets laid on a
-     drafting table, not white sheets on more white */
-  --bg: oklch(92.6% 0.017 234.0);
+  /* --bg is the inset sheet now rather than the table it lies on, so it moves
+     up towards paper; --sidebar carries the drafting-table role instead.
+     Panels still lift off it - --surface-1 stays a step brighter and every
+     panel carries a hairline - and the table showing round the sheet
+     re-supplies the frame the old darker ground used to give. */
+  --bg: oklch(96.3% 0.010 232.0);
   --surface-1: oklch(99.4% 0.004 230.0);
   --surface-2: oklch(98.0% 0.008 231.0);
   --surface-3: oklch(94.8% 0.014 233.0);
@@ -167,7 +181,13 @@
      weight and most of the chroma taken out. */
   --grid-line: oklch(38.0% 0.045 250.0 / 0.03);
 
-  --sidebar: oklch(90.0% 0.021 236.0);
+  /* the drafting table: a clear step under the sheet, not a tint of it */
+  --sidebar: oklch(89.4% 0.022 236.0);
+
+  /* ink is the wrong direction on paper - a nav row highlights by going
+     lighter, i.e. towards the sheet it opens */
+  --sidebar-hover: oklch(100% 0 0 / 0.55);
+  --sidebar-active: oklch(100% 0 0 / 0.92);
 
   --destructive-foreground: oklch(98.5% 0.006 230.0);
   /* everything else re-resolves through the var() chain automatically */
@@ -212,6 +232,8 @@
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-hover: var(--sidebar-hover);
+  --color-sidebar-active: var(--sidebar-active);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
@@ -366,5 +388,104 @@
     background: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
     color: var(--brand-contrast);
     box-shadow: 0 1px 0 oklch(100% 0 89.9 / 0.28) inset, 0 6px 20px var(--brand-soft);
+  }
+}
+
+/* ---------- 7. Form field adaptation ---------- */
+/* @akinurrahman/form ships shadcn defaults: 14px sentence-case labels, 12px
+   radii, and a `bg-input-bg` token this theme never defines, so its inputs
+   render with no background at all. Its label, description and message
+   elements take no className, so the retune has to live here.
+
+   Deliberately unlayered: Tailwind utilities sit in @layer utilities, and a
+   layered rule always loses to an unlayered one regardless of specificity.
+   Scoped to a form item so the toolbar's search box and filter selects keep
+   their own compact sizing. */
+
+[data-slot='form-item'] {
+  /* Grid rows are content-sized, but a stretched grid item spreads its leftover
+     height across them. In a two-column row that pushes the shorter field's
+     label off the baseline its neighbour sets. */
+  align-content: start;
+  gap: 0.375rem;
+}
+
+[data-slot='form-item'] [data-slot='form-label'] {
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+/* The asterisk carries its own ml-1, which the label's flex gap would double. */
+[data-slot='form-item'] [data-slot='form-label'] > span {
+  margin-left: 0;
+}
+
+[data-slot='form-item'] [data-slot='form-description'] {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-low);
+}
+
+[data-slot='form-item'] [data-slot='form-message'] {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--red);
+}
+
+/* One skin for every control a field can hold, so a row never mixes two corner
+   radii or two backgrounds. */
+[data-slot='form-item']
+  :is(
+    input:not([type='checkbox']),
+    [data-slot='select-trigger'],
+    [data-slot='date-picker-trigger'],
+    [role='combobox']
+  ) {
+  border-radius: var(--radius-lg);
+  border-color: var(--hairline-strong);
+  background: var(--surface-2);
+  font-size: 0.875rem;
+}
+
+/* 40px is the touch target, dropping to the 36px desktop scale from sm up. */
+[data-slot='form-item']
+  :is(
+    input:not([type='checkbox']),
+    [data-slot='select-trigger'],
+    [data-slot='date-picker-trigger']
+  ) {
+  height: 2.5rem;
+}
+
+/* The multi select grows with its chips, so it gets a floor rather than a
+   height - pinning it would clip the second row of selections. */
+[data-slot='form-item'] [role='combobox'] {
+  min-height: 2.5rem;
+  height: auto;
+}
+
+[data-slot='form-item'] [data-slot='textarea'] {
+  border-radius: var(--radius-lg);
+  border-color: var(--hairline-strong);
+  background: var(--surface-2);
+}
+
+@media (width >= 40rem) {
+  [data-slot='form-item']
+    :is(
+      input:not([type='checkbox']),
+      [data-slot='select-trigger'],
+      [data-slot='date-picker-trigger']
+    ) {
+    height: 2.25rem;
+  }
+
+  [data-slot='form-item'] [role='combobox'] {
+    min-height: 2.25rem;
   }
 }

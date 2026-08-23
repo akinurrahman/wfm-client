@@ -5,12 +5,35 @@ const { keys: ROLE } = USER_ROLES;
 
 export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
   {
-    group: "General",
     items: [
       {
         title: "Dashboard",
         url: "/dashboard",
         icon: "LayoutDashboard",
+        roles: [ROLE.SITE_ADMIN, ROLE.EMPLOYEE],
+      },
+    ],
+  },
+  {
+    group: "Organization",
+    items: [
+      {
+        title: "Designations",
+        url: "/designations",
+        icon: "BriefcaseBusiness",
+        roles: [ROLE.SITE_ADMIN],
+      },
+      {
+        title: "Shifts",
+        url: "/shifts",
+        icon: "CalendarClock",
+        roles: [ROLE.SITE_ADMIN],
+      },
+      {
+        title: "Holidays",
+        url: "/holidays",
+        icon: "CalendarDays",
+        // Reads are open to employees so their attendance calendar can render.
         roles: [ROLE.SITE_ADMIN, ROLE.EMPLOYEE],
       },
     ],

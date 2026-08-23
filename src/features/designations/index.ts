@@ -1,0 +1,1 @@
+export { designationRoutes } from './routes';

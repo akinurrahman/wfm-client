@@ -25,7 +25,7 @@ function pageWindow(current: number, totalPages: number): (number | 'gap')[] {
 }
 
 export function DataTablePagination({ pagination, onPageChange, className }: Props) {
-  const { page, limit, total, totalPages, hasNext, hasPrev } = pagination;
+  const { page, limit, total, totalPages, hasNext, hasPrevious } = pagination;
 
   if (total === 0) return null;
 
@@ -50,7 +50,7 @@ export function DataTablePagination({ pagination, onPageChange, className }: Pro
           variant="ghost"
           size="icon-sm"
           aria-label="Previous page"
-          disabled={!hasPrev}
+          disabled={!hasPrevious}
           onClick={() => onPageChange(page - 1)}
         >
           <ChevronLeft />

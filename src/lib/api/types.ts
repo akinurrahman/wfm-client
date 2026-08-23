@@ -6,7 +6,7 @@ export type Pagination = {
   total: number;
   totalPages: number;
   hasNext: boolean;
-  hasPrev: boolean;
+  hasPrevious: boolean;
 };
 
 export type ApiResponse<T> = {

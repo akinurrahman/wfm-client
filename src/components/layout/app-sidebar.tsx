@@ -14,8 +14,8 @@ import { ThemeSwitcher } from './theme-switcher';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar
+            variant="inset"
             collapsible="icon"
-            className="border-hairline"
             {...props}
         >
             <SidebarHeader className="p-0">

@@ -7,7 +7,8 @@ export type SidebarItem = {
 };
 
 export type SidebarGroup = {
-  group: string;
+  /** Section heading. Omit to render the group without a label. */
+  group?: string;
   roles?: string[];
   items: SidebarItem[];
 };

@@ -7,6 +7,9 @@ import AccessDeniedPage from '@/components/shared/access-denied';
 import NotFoundPage from '@/components/shared/not-found';
 import { authRoutes } from '@/features/auth';
 import { dashboardRoutes } from '@/features/dashboard';
+import { designationRoutes } from '@/features/designations';
+import { holidayRoutes } from '@/features/holidays';
+import { shiftRoutes } from '@/features/shifts';
 
 
 export const router = createBrowserRouter([
@@ -15,14 +18,13 @@ export const router = createBrowserRouter([
     children: [...authRoutes],
   },
 
-  /* â”€â”€ Protected routes â”€â”€ */
   {
     element: (
       <AuthGuard>
         <LayoutWrapper />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes],
+    children: [...dashboardRoutes, ...designationRoutes, ...shiftRoutes, ...holidayRoutes],
   },
 
   /* â”€â”€ Standalone â”€â”€ */

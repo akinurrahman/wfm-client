@@ -17,7 +17,7 @@ export function useCommandItems(): CommandItem[] {
       groups.flatMap(group =>
         group.items.flatMap(item => {
           const entry: CommandItem = {
-            id: `${group.group}:${item.url}`,
+            id: `${group.group ?? ""}:${item.url}`,
             title: item.title,
             url: item.url,
             group: group.group,
@@ -25,7 +25,7 @@ export function useCommandItems(): CommandItem[] {
           };
 
           const children = (item.items ?? []).map<CommandItem>(sub => ({
-            id: `${group.group}:${item.url}:${sub.url}`,
+            id: `${group.group ?? ""}:${item.url}:${sub.url}`,
             title: sub.title,
             url: sub.url,
             group: group.group,

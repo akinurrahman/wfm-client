@@ -47,8 +47,10 @@ export function createLookup<T extends string>(
       label: meta.label,
     })),
     resolve,
-    toZodEnum() {
-      return z.enum(values as [T, ...T[]]);
+    /** A message replaces zod's "Invalid option: expected one of ...", which
+     *  leaks the wire values at someone who simply picked nothing. */
+    toZodEnum(message?: string) {
+      return z.enum(values as [T, ...T[]], message ? { error: message } : undefined);
     },
   };
 }

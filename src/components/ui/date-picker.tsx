@@ -30,6 +30,11 @@ interface DatePickerProps {
     maxDate?: string;
     /** For a picker whose label sits outside the control, e.g. a toolbar pair. */
     ariaLabel?: string;
+    /** Set by a form field so an external label and error message can point at
+     *  the trigger the same way they would at an input. */
+    id?: string;
+    'aria-invalid'?: boolean;
+    'aria-describedby'?: string;
     className?: string;
 }
 
@@ -49,6 +54,9 @@ function DatePicker({
     minDate,
     maxDate,
     ariaLabel,
+    id,
+    'aria-invalid': ariaInvalid,
+    'aria-describedby': ariaDescribedBy,
     className,
 }: DatePickerProps) {
     const [open, setOpen] = useState(false);
@@ -75,7 +83,10 @@ function DatePicker({
                 render={
                     <Button
                         data-slot="date-picker-trigger"
+                        id={id}
                         aria-label={ariaLabel}
+                        aria-invalid={ariaInvalid}
+                        aria-describedby={ariaDescribedBy}
                         variant="outline"
                         className={cn(
                             'w-full justify-start gap-2 font-normal',

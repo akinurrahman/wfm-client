@@ -27,7 +27,7 @@ function scoreItem(item: CommandItem, query: string): number {
   const parent = item.parent ? scoreText(item.parent, query) : -1;
   if (parent !== -1) return parent + 4;
 
-  const group = scoreText(item.group, query);
+  const group = item.group ? scoreText(item.group, query) : -1;
   if (group !== -1) return group + 8;
 
   return -1;
