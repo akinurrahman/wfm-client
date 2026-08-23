@@ -8,20 +8,24 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useLogout } from '@/features/auth';
 import { getInitials } from '@/lib';
 import { useAuthStore } from '@/stores/auth.store';
 
 export function UserMenu() {
     const navigate = useNavigate();
     const user = useAuthStore(state => state.user);
-    const logout = useAuthStore(state => state.logout);
+    const logout = useLogout();
 
-    const fullName = user?.fullName ?? 'Guest User';
+    // The token payload carries no display name, so the email local part is the
+    // most human handle available.
+    const fullName = user ? user.email.split('@')[0].replace(/[._-]+/g, ' ') : 'Guest User';
     const email = user?.email ?? 'not signed in';
 
     const handleLogout = () => {
-        logout();
-        navigate('/login', { replace: true });
+        logout.mutate(undefined, {
+            onSettled: () => navigate('/login', { replace: true }),
+        });
     };
 
     return (
@@ -49,7 +53,7 @@ export function UserMenu() {
                         {getInitials(fullName)}
                     </span>
                     <span className="grid flex-1 leading-tight">
-                        <span className="truncate text-[13px] font-medium text-text-hi">
+                        <span className="truncate text-[13px] font-medium text-text-hi capitalize">
                             {fullName}
                         </span>
                         <span className="truncate text-[11px] text-text-low">{email}</span>

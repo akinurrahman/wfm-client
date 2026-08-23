@@ -8,25 +8,24 @@ declare global {
   }
 }
 
+/** Fakes a signed-in session for UI work. The tokens are not real, so the first
+ *  /auth/me against a live backend will 401 and clear this. */
 export function seedDummyAuth(role: UserRole = USER_ROLES.keys.SITE_ADMIN) {
-  const now = new Date().toISOString();
+  const issuedAt = Math.floor(Date.now() / 1000);
 
-  useAuthStore.getState().login({
+  useAuthStore.setState({
     accessToken: 'dev-access-token',
     refreshToken: 'dev-refresh-token',
+    isLoggedIn: true,
+    isAuthInitialized: true,
     user: {
-      _id: 'dev-user',
-      fullName: 'Dev User',
+      sub: 'dev-user',
       email: 'dev@example.com',
       role,
-      isActive: true,
-      lastLogin: now,
-      createdAt: now,
-      updatedAt: now,
+      iat: issuedAt,
+      exp: issuedAt + 3600,
     },
   });
-
-  useAuthStore.setState({ isAuthInitialized: true });
 }
 
 window.seedDummyAuth = seedDummyAuth;

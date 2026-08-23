@@ -300,7 +300,33 @@
   }
 }
 
-/* ---------- 5. Reusable composition classes ---------- */
+/* ---------- 5. Entrance keyframes ---------- */
+/* Declared outside @layer so the animation shorthand in a component can reach
+   them. The reduced-motion block above collapses both to a single frame. */
+
+@keyframes m-draw {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes m-rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ---------- 6. Reusable composition classes ---------- */
 
 @layer components {
   /* The work area. Grid and lamp wash live here rather than on <body> so the

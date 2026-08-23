@@ -2,32 +2,17 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
 import { cookieStorage } from '@/lib';
-
-export type User = {
-  _id: string;
-  fullName: string;
-  email: string;
-  role: string;
-  isActive: boolean;
-  lastLogin: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type AuthData = {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-};
+import type { AuthUser, Tokens } from '@/lib/api/types';
 
 interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   accessToken: string | null;
   refreshToken: string | null;
   isLoggedIn: boolean;
   isAuthInitialized: boolean;
 
-  login: (data: AuthData) => void;
+  setTokens: (tokens: Tokens) => void;
+  setUser: (user: AuthUser) => void;
   updateTokens: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
 }
@@ -42,13 +27,18 @@ export const useAuthStore = create<AuthState>()(
         isLoggedIn: false,
         isAuthInitialized: false,
 
-        login: data => {
+        // Login returns tokens only. The identity arrives separately from
+        // /auth/me, so the store fills in two steps.
+        setTokens: tokens => {
           set({
-            user: data.user,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
             isLoggedIn: true,
           });
+        },
+
+        setUser: user => {
+          set({ user });
         },
 
         updateTokens: (accessToken, refreshToken) => {

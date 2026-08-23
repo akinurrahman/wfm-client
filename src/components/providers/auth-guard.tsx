@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { DEFAULT_ROUTES_BY_ROLE } from '@/constants/routes';
 import { canAccessRoute, isAuthRoute } from '@/lib';
-import { type UserRole } from '@/constants/ROLES';
+import { useAuthSession } from '@/features/auth';
 
 import { FullScreenLoader } from '../loader/loader';
 import { useAuthStore } from '@/stores/auth.store';
@@ -20,6 +20,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     const user = useAuthStore(s => s.user);
 
     const buildSidebar = useSidebarStore(s => s.buildSidebar);
+
+    useAuthSession();
 
     useEffect(() => {
         if (!user?.role) return;
@@ -39,12 +41,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         if (!user) return;
 
         if (isAuthRoute(pathname)) {
-            const redirectTo = DEFAULT_ROUTES_BY_ROLE[user.role as UserRole];
+            const redirectTo = DEFAULT_ROUTES_BY_ROLE[user.role];
             if (redirectTo) navigate(redirectTo, { replace: true });
             return;
         }
 
-        const allowed = canAccessRoute(pathname, user.role as UserRole);
+        const allowed = canAccessRoute(pathname, user.role);
         if (!allowed) navigate('/access-denied', { replace: true });
     }, [isAuthInitialized, accessToken, user, pathname, navigate]);
 
