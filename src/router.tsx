@@ -8,6 +8,7 @@ import NotFoundPage from '@/components/shared/not-found';
 import { authRoutes } from '@/features/auth';
 import { dashboardRoutes } from '@/features/dashboard';
 import { designationRoutes } from '@/features/designations';
+import { employeeRoutes } from '@/features/employees';
 import { holidayRoutes } from '@/features/holidays';
 import { shiftRoutes } from '@/features/shifts';
 
@@ -24,7 +25,13 @@ export const router = createBrowserRouter([
         <LayoutWrapper />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...designationRoutes, ...shiftRoutes, ...holidayRoutes],
+    children: [
+      ...dashboardRoutes,
+      ...designationRoutes,
+      ...shiftRoutes,
+      ...holidayRoutes,
+      ...employeeRoutes,
+    ],
   },
 
   /* â”€â”€ Standalone â”€â”€ */

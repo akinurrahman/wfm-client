@@ -15,6 +15,17 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
     ],
   },
   {
+    group: "People",
+    items: [
+      {
+        title: "Employees",
+        url: "/employees",
+        icon: "Users",
+        roles: [ROLE.SITE_ADMIN],
+      },
+    ],
+  },
+  {
     group: "Organization",
     items: [
       {

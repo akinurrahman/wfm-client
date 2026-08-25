@@ -6,7 +6,10 @@ export const SHIFT_KEYS = {
   all: ['shifts'] as const,
   lists: () => [...SHIFT_KEYS.all, 'list'] as const,
   list: (filters: ShiftFilters) => [...SHIFT_KEYS.lists(), filters] as const,
+  options: () => [...SHIFT_KEYS.all, 'options'] as const,
 };
+
+export const SHIFT_OPTIONS_LIMIT = 100;
 
 /** The API reads `isActive` as the strings "true"/"false", so the filter holds
  *  them verbatim rather than a boolean it would have to stringify twice. */

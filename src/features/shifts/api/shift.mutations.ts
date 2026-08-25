@@ -12,6 +12,7 @@ export function useCreateShift() {
     mutationFn: (payload: ShiftPayload) => shiftApi.create(payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_KEYS.lists() });
+      qc.invalidateQueries({ queryKey: SHIFT_KEYS.options() });
       toast.success('Shift created');
     },
   });
@@ -24,6 +25,7 @@ export function useUpdateShift(id: string) {
     mutationFn: (payload: ShiftPayload) => shiftApi.update(id, payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_KEYS.lists() });
+      qc.invalidateQueries({ queryKey: SHIFT_KEYS.options() });
       toast.success('Shift updated');
     },
   });
@@ -36,6 +38,8 @@ export function useDeleteShift() {
     mutationFn: (id: string) => shiftApi.remove(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIFT_KEYS.lists() });
+      // The options key too: the employee form's shift dropdown reads it.
+      qc.invalidateQueries({ queryKey: SHIFT_KEYS.options() });
       toast.success('Shift deleted');
     },
   });

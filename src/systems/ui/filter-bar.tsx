@@ -6,8 +6,10 @@ import { cn } from '@/lib/utils';
 type Props = {
   /** True only while something is off its default, so a pristine screen never
    *  offers to clear filters that were never applied. */
-  isFiltered: boolean;
-  onReset: () => void;
+  isFiltered?: boolean;
+  /** Omitted by a toolbar whose controls already own a clear action, e.g. one
+   *  built around FilterPopover, so the row does not offer it twice. */
+  onReset?: () => void;
   /** Page-level actions - typically the "new record" button. Kept in this row
    *  rather than beside the page title so the header stays copy only. */
   actions?: React.ReactNode;
@@ -22,7 +24,7 @@ export function FilterBar({ isFiltered, onReset, actions, className, children }:
     <div className={cn('mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center', className)}>
       {children}
 
-      {isFiltered ? (
+      {isFiltered && onReset ? (
         <Button variant="ghost" size="sm" onClick={onReset} className="h-10 self-start sm:h-8">
           <X />
           Clear filters

@@ -55,13 +55,16 @@ export function FilterPopover({
         <Popover open={open} onOpenChange={handleOpenChange}>
             <PopoverTrigger
                 aria-label={activeCount > 0 ? `Filters, ${activeCount} applied` : 'Filters'}
-                render={<Button variant="outline" className={cn('relative', className)} />}
+                render={<Button variant="outline" className={cn('gap-1.5', className)} />}
             >
                 <Filter />
+                {/* Inside the button rather than pinned to its corner: a badge
+                    that overhangs the trigger gets clipped by whatever the
+                    toolbar happens to sit inside. */}
                 {activeCount > 0 && (
                     <span
                         aria-hidden
-                        className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] leading-none"
+                        className="bg-primary text-primary-foreground flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none"
                     >
                         {activeCount}
                     </span>

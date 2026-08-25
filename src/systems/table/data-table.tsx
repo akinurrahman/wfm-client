@@ -129,6 +129,10 @@ export function DataTable<TData>({
                   onKeyDown={
                     onRowClick
                       ? event => {
+                          // A keypress on a control inside the row bubbles up to
+                          // here, so activating a row action from the keyboard
+                          // would otherwise open the row as well.
+                          if (event.target !== event.currentTarget) return;
                           if (event.key === 'Enter' || event.key === ' ') {
                             event.preventDefault();
                             onRowClick(row.original);

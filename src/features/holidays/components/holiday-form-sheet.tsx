@@ -1,14 +1,7 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
-import { toCalendarDate } from '@/lib/time';
 import type { DefaultValues } from 'react-hook-form';
 
-import { DateField, Form, FormActions, SwitchField, TagsField } from '@/systems/form';
+import { toCalendarDate } from '@/lib/time';
+import { DateField, FormSheet, SwitchField, TagsField } from '@/systems/form';
 
 import { useCreateHoliday, useUpdateHoliday } from '../api/holiday.mutations';
 import { HOLIDAY_NAMES_MAX } from '../definitions/holiday.constants';
@@ -37,50 +30,34 @@ export function HolidayFormSheet({ open, onOpenChange, holiday }: Props) {
     : { names: [], isOptional: false };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full gap-0 p-0 sm:max-w-md">
-        <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg text-text-hi">
-            {isEdit ? 'Edit holiday' : 'New holiday'}
-          </SheetTitle>
-          <SheetDescription className="text-[13px] text-text-mid">
-            One entry per calendar day. A day already on the calendar cannot be added twice.
-          </SheetDescription>
-        </SheetHeader>
+    <FormSheet<HolidayFormValues>
+      open={open}
+      onOpenChange={onOpenChange}
+      formKey={holiday?.id ?? 'new'}
+      title={isEdit ? 'Edit holiday' : 'New holiday'}
+      description="One entry per calendar day. A day already on the calendar cannot be added twice."
+      schema={holidayFormSchema}
+      defaultValues={defaultValues}
+      submitLabel={isEdit ? 'Save changes' : 'Add holiday'}
+      isPending={mutation.isPending}
+      onSubmit={values => mutation.mutate(values, { onSuccess: () => onOpenChange(false) })}
+    >
+      <DateField name="date" label="Date" placeholder="Pick the day" required />
 
-        <Form<HolidayFormValues>
-          key={holiday?.id ?? 'new'}
-          schema={holidayFormSchema}
-          defaultValues={defaultValues}
-          onSubmit={values => mutation.mutate(values, { onSuccess: () => onOpenChange(false) })}
-          className="flex min-h-0 flex-1 flex-col"
-        >
-          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5">
-            <DateField name="date" label="Date" placeholder="Pick the day" required />
+      <TagsField
+        name="names"
+        label="Observed as"
+        placeholder="Diwali"
+        maxItems={HOLIDAY_NAMES_MAX}
+        description="Festivals collide, so one day can carry several names."
+        required
+      />
 
-            <TagsField
-              name="names"
-              label="Observed as"
-              placeholder="Diwali"
-              maxItems={HOLIDAY_NAMES_MAX}
-              description="Festivals collide, so one day can carry several names."
-              required
-            />
-
-            <SwitchField
-              name="isOptional"
-              label="Optional holiday"
-              description="Restricted or floating. The day still counts as working for attendance."
-            />
-          </div>
-
-          <FormActions
-            submitLabel={isEdit ? 'Save changes' : 'Add holiday'}
-            isPending={mutation.isPending}
-            onCancel={() => onOpenChange(false)}
-          />
-        </Form>
-      </SheetContent>
-    </Sheet>
+      <SwitchField
+        name="isOptional"
+        label="Optional holiday"
+        description="Restricted or floating. The day still counts as working for attendance."
+      />
+    </FormSheet>
   );
 }

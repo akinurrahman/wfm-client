@@ -1,13 +1,6 @@
 import type { DefaultValues } from 'react-hook-form';
 
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
-import {
   formatDuration,
   isNightShift,
   shiftSpanMinutes,
@@ -15,7 +8,7 @@ import {
   timeToMinutes,
   WEEKDAYS,
 } from '@/lib/time';
-import { Form, FormActions, InputField, SelectField, SwitchField, TimeField } from '@/systems/form';
+import { FormSheet, InputField, SelectField, SwitchField, TimeField } from '@/systems/form';
 
 import { useCreateShift, useUpdateShift } from '../api/shift.mutations';
 import { SHIFT_CODE_MAX, SHIFT_NAME_MAX } from '../definitions/shift.constants';
@@ -61,134 +54,115 @@ export function ShiftFormSheet({ open, onOpenChange, shift }: Props) {
     : CREATE_DEFAULTS;
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full gap-0 p-0 sm:max-w-2xl">
-        <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg leading-tight text-text-hi">
-            {isEdit ? `Edit ${shift?.name}` : 'New shift'}
-          </SheetTitle>
-          <SheetDescription className="text-[13px] leading-relaxed text-text-mid">
-            Attendance is measured against these hours, so a shift has to exist before anyone can
-            be rostered onto it.
-          </SheetDescription>
-        </SheetHeader>
+    <FormSheet<ShiftFormValues>
+      open={open}
+      onOpenChange={onOpenChange}
+      formKey={shift?.id ?? 'new'}
+      title={isEdit ? `Edit ${shift?.name}` : 'New shift'}
+      description="Attendance is measured against these hours, so a shift has to exist before anyone can be rostered onto it."
+      schema={shiftFormSchema}
+      defaultValues={defaultValues}
+      submitLabel={isEdit ? 'Save changes' : 'Create shift'}
+      isPending={mutation.isPending}
+      onSubmit={values =>
+        mutation.mutate(toShiftPayload(values), { onSuccess: () => onOpenChange(false) })
+      }
+      className="sm:max-w-2xl"
+    >
+      {form => {
+        const start = form.watch('startTime') ?? '';
+        const end = form.watch('endTime') ?? '';
+        const breakMinutes = form.watch('breakMinutes') ?? 0;
 
-        <Form<ShiftFormValues>
-          key={shift?.id ?? 'new'}
-          schema={shiftFormSchema}
-          defaultValues={defaultValues}
-          onSubmit={values =>
-            mutation.mutate(toShiftPayload(values), { onSuccess: () => onOpenChange(false) })
-          }
-          className="flex min-h-0 flex-1 flex-col"
-        >
-          {form => {
-            const start = form.watch('startTime') ?? '';
-            const end = form.watch('endTime') ?? '';
-            const breakMinutes = form.watch('breakMinutes') ?? 0;
+        // A half-typed time reads as NaN, so the summary waits until both
+        // fields are whole and describe a real span.
+        const complete = TIME_PATTERN.test(start) && TIME_PATTERN.test(end) && start !== end;
+        const startMinutes = complete ? timeToMinutes(start) : 0;
+        const endMinutes = complete ? timeToMinutes(end) : 0;
+        const span = complete ? shiftSpanMinutes(startMinutes, endMinutes) : 0;
 
-            // A half-typed time reads as NaN, so the summary waits until both
-            // fields are whole and describe a real span.
-            const complete = TIME_PATTERN.test(start) && TIME_PATTERN.test(end) && start !== end;
-            const startMinutes = complete ? timeToMinutes(start) : 0;
-            const endMinutes = complete ? timeToMinutes(end) : 0;
-            const span = complete ? shiftSpanMinutes(startMinutes, endMinutes) : 0;
-
-            return (
-              <>
-                <div className="min-h-0 flex-1 space-y-6 overflow-y-auto p-5">
-                  <Section title="Identity">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <InputField
-                        name="name"
-                        label="Name"
-                        placeholder="General Shift"
-                        maxLength={SHIFT_NAME_MAX}
-                        required
-                      />
-                      <InputField
-                        name="code"
-                        label="Code"
-                        placeholder="GEN"
-                        maxLength={SHIFT_CODE_MAX}
-                        description="Short and unique. Uppercased on save."
-                        required
-                      />
-                    </div>
-                  </Section>
-
-                  <Section title="Hours">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <TimeField name="startTime" label="Starts" required />
-                      <TimeField name="endTime" label="Ends" required />
-                    </div>
-
-                    {/* Reading a night shift off two time fields is a mental
-                        subtraction nobody should have to do, so the arithmetic
-                        is stated outright. */}
-                    {complete ? (
-                      <dl className="flex flex-wrap items-center gap-x-5 gap-y-1.5 rounded-lg border border-hairline bg-surface-2 px-3.5 py-2.5">
-                        <Metric label="Span" value={formatDuration(span)} />
-                        <Metric
-                          label="Net"
-                          value={formatDuration(Math.max(span - breakMinutes, 0))}
-                        />
-                        {isNightShift(startMinutes, endMinutes) ? (
-                          <span className="font-mono text-[10px] tracking-[0.14em] text-awaiting uppercase">
-                            Crosses midnight
-                          </span>
-                        ) : null}
-                      </dl>
-                    ) : null}
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <InputField
-                        name="breakMinutes"
-                        type="number"
-                        label="Break (minutes)"
-                        min={0}
-                        required
-                      />
-                      <InputField
-                        name="graceMinutes"
-                        type="number"
-                        label="Grace (minutes)"
-                        min={0}
-                        description="Lateness forgiven before a day counts as short."
-                        required
-                      />
-                    </div>
-                  </Section>
-
-                  <Section title="Schedule">
-                    <SelectField
-                      multi
-                      name="weeklyOffDays"
-                      label="Weekly offs"
-                      placeholder="Pick the days off"
-                      options={WEEKDAY_OPTIONS}
-                      description="At most six, since a shift needs at least one working day."
-                    />
-
-                    <SwitchField
-                      name="isActive"
-                      label="Active"
-                      description="Inactive shifts stay on record but cannot be assigned to anyone new."
-                    />
-                  </Section>
-                </div>
-
-                <FormActions
-                  submitLabel={isEdit ? 'Save changes' : 'Create shift'}
-                  isPending={mutation.isPending}
-                  onCancel={() => onOpenChange(false)}
+        return (
+          <>
+            <Section title="Identity">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <InputField
+                  name="name"
+                  label="Name"
+                  placeholder="General Shift"
+                  maxLength={SHIFT_NAME_MAX}
+                  required
                 />
-              </>
-            );
-          }}
-        </Form>
-      </SheetContent>
-    </Sheet>
+                <InputField
+                  name="code"
+                  label="Code"
+                  placeholder="GEN"
+                  maxLength={SHIFT_CODE_MAX}
+                  description="Short and unique. Uppercased on save."
+                  required
+                />
+              </div>
+            </Section>
+
+            <Section title="Hours">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <TimeField name="startTime" label="Starts" required />
+                <TimeField name="endTime" label="Ends" required />
+              </div>
+
+              {/* Reading a night shift off two time fields is a mental
+                  subtraction nobody should have to do, so the arithmetic
+                  is stated outright. */}
+              {complete ? (
+                <dl className="flex flex-wrap items-center gap-x-5 gap-y-1.5 rounded-lg border border-hairline bg-surface-2 px-3.5 py-2.5">
+                  <Metric label="Span" value={formatDuration(span)} />
+                  <Metric label="Net" value={formatDuration(Math.max(span - breakMinutes, 0))} />
+                  {isNightShift(startMinutes, endMinutes) ? (
+                    <span className="font-mono text-[10px] tracking-[0.14em] text-awaiting uppercase">
+                      Crosses midnight
+                    </span>
+                  ) : null}
+                </dl>
+              ) : null}
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <InputField
+                  name="breakMinutes"
+                  type="number"
+                  label="Break (minutes)"
+                  min={0}
+                  required
+                />
+                <InputField
+                  name="graceMinutes"
+                  type="number"
+                  label="Grace (minutes)"
+                  min={0}
+                  description="Lateness forgiven before a day counts as short."
+                  required
+                />
+              </div>
+            </Section>
+
+            <Section title="Schedule">
+              <SelectField
+                multi
+                name="weeklyOffDays"
+                label="Weekly offs"
+                placeholder="Pick the days off"
+                options={WEEKDAY_OPTIONS}
+                description="At most six, since a shift needs at least one working day."
+              />
+
+              <SwitchField
+                name="isActive"
+                label="Active"
+                description="Inactive shifts stay on record but cannot be assigned to anyone new."
+              />
+            </Section>
+          </>
+        );
+      }}
+    </FormSheet>
   );
 }
 

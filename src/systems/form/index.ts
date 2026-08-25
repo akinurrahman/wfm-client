@@ -14,6 +14,7 @@ export {
 export type { AsyncFetchArgs, AsyncFetchResult, BaseFieldProps, Option } from '@akinurrahman/form';
 
 export { FormActions } from './form-actions';
+export { FormSheet } from './form-sheet';
 
 export { DateField } from './fields/date-field';
 export { FieldShell } from './fields/field-shell';

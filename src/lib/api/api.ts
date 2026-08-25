@@ -99,8 +99,6 @@ function createApiInstance(baseURL: string) {
 }
 
 export const api = {
-  legacy: createApiInstance(`${BASE_URL}/api`),
   v1: createApiInstance(`${BASE_URL}/api/v1`),
-  // The auth service is mounted at the host root, with no global prefix.
   root: createApiInstance(BASE_URL),
 };

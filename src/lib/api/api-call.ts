@@ -23,7 +23,7 @@ export async function apiCall<T>(
     body,
     params,
     signal,
-    version = "legacy",
+    version = "root",
     responseType = "json",
     contentType = "application/json",
     headers = {},
