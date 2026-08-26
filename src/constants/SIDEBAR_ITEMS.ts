@@ -26,6 +26,23 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
     ],
   },
   {
+    group: "Attendance",
+    items: [
+      {
+        title: "Daily roster",
+        url: "/attendance",
+        icon: "CalendarCheck",
+        roles: [ROLE.SITE_ADMIN],
+      },
+      {
+        title: "Attendance tools",
+        url: "/attendance/tools",
+        icon: "Wrench",
+        roles: [ROLE.SITE_ADMIN],
+      },
+    ],
+  },
+  {
     group: "Organization",
     items: [
       {

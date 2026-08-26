@@ -1,53 +1,28 @@
 import {
-  Activity,
-  BarChart3,
-  Bell,
   BriefcaseBusiness,
   CalendarCheck,
   CalendarClock,
   CalendarDays,
-  CheckSquare,
-  CreditCard,
-  FileText,
-  Folder,
-  FolderKanban,
-  Key,
-  Landmark,
   LayoutDashboard,
-  Plug,
-  Shield,
   Star,
-  User,
-  UserCircle,
-  UserPlus,
   Users,
+  Wrench,
   type LucideIcon,
 } from 'lucide-react';
 
-/** Maps the `icon` string on a sidebar item to a real icon component. */
+/** Maps the `icon` string on a sidebar item to a real icon component.
+ *
+ *  Only what the nav actually uses: the map is one live object, so a name
+ *  listed here ships whether or not any item references it. Adding a nav item
+ *  with a new icon means adding it in both places below. */
 export const NAV_ICONS: Record<string, LucideIcon> = {
-  Activity,
-  BarChart3,
-  Bell,
   BriefcaseBusiness,
   CalendarCheck,
   CalendarClock,
   CalendarDays,
-  CheckSquare,
-  CreditCard,
-  FileText,
-  Folder,
-  FolderKanban,
-  Key,
-  Landmark,
   LayoutDashboard,
-  Plug,
-  Shield,
-  Star,
-  User,
-  UserCircle,
-  UserPlus,
   Users,
+  Wrench,
 };
 
 export const resolveNavIcon = (name?: string): LucideIcon =>

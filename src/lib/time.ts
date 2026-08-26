@@ -1,6 +1,8 @@
 /** Shifts store their boundaries as minutes from midnight (0..1439), not
  *  strings, so every screen that shows or edits one converts through here. */
 
+import { addDays, format, isValid, parseISO } from 'date-fns';
+
 const MINUTES_IN_DAY = 24 * 60;
 
 /** A complete, zero-padded 24h wall-clock time. Shared so a schema and a
@@ -10,6 +12,15 @@ export const TIME_PATTERN = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
 export const timeToMinutes = (time: string) => {
   const [hours, minutes] = time.split(':');
   return Number(hours) * 60 + Number(minutes);
+};
+
+/** The inverse of `timeToMinutes`, zero-padded so the result can go straight
+ *  into a `type="time"` control. Wraps rather than overflowing, so the minute
+ *  after a night shift's midnight reads as 00:00 and not as 24:00. */
+export const minutesToTime = (minutes: number) => {
+  const wrapped = ((Math.round(minutes) % MINUTES_IN_DAY) + MINUTES_IN_DAY) % MINUTES_IN_DAY;
+  const hours = Math.floor(wrapped / 60);
+  return `${String(hours).padStart(2, '0')}:${String(wrapped % 60).padStart(2, '0')}`;
 };
 
 /** A shift that ends before it starts has crossed midnight. */
@@ -48,3 +59,21 @@ export const weekdayLabel = (day: number) => WEEKDAYS[day]?.label ?? String(day)
  *  before. */
 export const toCalendarDate = (value: string | null | undefined) =>
   value ? String(value).slice(0, 10) : '';
+
+/** The wall-clock time an instant lands on, as `HH:mm`. Punches cross the wire
+ *  as instants but are read on the office clock, which for this deployment is
+ *  the viewer's own - so no explicit zone conversion happens here. */
+export const instantToClock = (value: string | null | undefined) => {
+  if (!value) return null;
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'HH:mm') : null;
+};
+
+/** Today on the viewer's own clock. `toISOString().slice(0, 10)` would answer
+ *  in UTC, which is still yesterday for anyone east of the line before 05:30. */
+export const todayCalendarDate = () => format(new Date(), 'yyyy-MM-dd');
+
+/** Steps a `YYYY-MM-DD` value by whole days, staying in calendar-date space so
+ *  no timezone ever enters the arithmetic. */
+export const shiftCalendarDate = (date: string, days: number) =>
+  format(addDays(parseISO(date), days), 'yyyy-MM-dd');

@@ -5,6 +5,7 @@ import AuthGuard from '@/components/providers/auth-guard';
 import AuthLayout from '@/components/providers/auth-layout';
 import AccessDeniedPage from '@/components/shared/access-denied';
 import NotFoundPage from '@/components/shared/not-found';
+import { attendanceRoutes } from '@/features/attendance';
 import { authRoutes } from '@/features/auth';
 import { dashboardRoutes } from '@/features/dashboard';
 import { designationRoutes } from '@/features/designations';
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       ...shiftRoutes,
       ...holidayRoutes,
       ...employeeRoutes,
+      ...attendanceRoutes,
     ],
   },
 

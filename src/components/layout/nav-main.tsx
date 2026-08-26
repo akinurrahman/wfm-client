@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { Link, useNavigate } from "react-router";
 
 import { ChevronRight } from "lucide-react";
@@ -34,8 +36,16 @@ export function NavMain() {
   const { state } = useSidebar();
 
   const { resolvedUrl } = useResolvedRoute();
-  const { pathname, isRouteActive, isExact } =
-    useResolvedActiveRoute(resolvedUrl);
+  // Sub-item urls stay out: a child being active should still light its
+  // parent, which is the one case the longest-match rule must not decide.
+  const topLevelUrls = useMemo(
+    () => groups.flatMap((group) => group.items.map((item) => item.url)),
+    [groups],
+  );
+  const { pathname, isRouteActive, isExact } = useResolvedActiveRoute(
+    resolvedUrl,
+    topLevelUrls,
+  );
 
   const { openItems, setOpenItems } = useInitialSidebarOpen(
     groups,

@@ -16,6 +16,8 @@ export type { AsyncFetchArgs, AsyncFetchResult, BaseFieldProps, Option } from '@
 export { FormActions } from './form-actions';
 export { FormSheet } from './form-sheet';
 
+export { ChoiceField } from './fields/choice-field';
+export type { ChoiceOption } from './fields/choice-field';
 export { DateField } from './fields/date-field';
 export { FieldShell } from './fields/field-shell';
 export { SwitchField } from './fields/switch-field';
