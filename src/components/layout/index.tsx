@@ -120,7 +120,7 @@ const LayoutWrapper = () => {
             }
         >
             <AppSidebar />
-            <SidebarInset className="m-sheet flex min-h-0 flex-col overflow-hidden">
+            <SidebarInset className="flex min-h-0 flex-col overflow-hidden">
                 <header
                     /* On a landing page the bar carries the page title
                      * itself, so it grows to fit instead of standing empty

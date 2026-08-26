@@ -351,10 +351,9 @@
 /* ---------- 6. Reusable composition classes ---------- */
 
 @layer components {
-  /* The work area. Grid and lamp wash live here rather than on <body> so the
-     sidebar rail stays a flat surface - the texture is what separates the two,
-     alongside the colour step. Paints image layers only, so it composes over
-     whatever background-color the element already carries. */
+  /* Drafting sheet: lamp wash + grid. Paints image layers only, so it
+     composes over whatever background-color the element already carries.
+     Used on the login split, not on the app work area. */
   .m-sheet {
     background-image:
       var(--wash),
