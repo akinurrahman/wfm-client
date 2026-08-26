@@ -8,6 +8,24 @@ export const attendanceRoutes: RouteObject[] = [
     }),
   },
   {
+    path: '/attendance/monthly',
+    lazy: async () => ({
+      Component: (await import('./pages/monthly/monthly-sheet-page')).default,
+    }),
+  },
+  {
+    path: '/attendance/periods',
+    lazy: async () => ({
+      Component: (await import('./pages/periods/period-list-page')).default,
+    }),
+  },
+  {
+    path: '/attendance/periods/:id/summary',
+    lazy: async () => ({
+      Component: (await import('./pages/periods/period-summary-page')).default,
+    }),
+  },
+  {
     path: '/attendance/tools',
     lazy: async () => ({
       Component: (await import('./pages/tools/attendance-tools-page')).default,

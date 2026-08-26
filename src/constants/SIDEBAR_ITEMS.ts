@@ -35,6 +35,18 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
         roles: [ROLE.SITE_ADMIN],
       },
       {
+        title: "Monthly sheet",
+        url: "/attendance/monthly",
+        icon: "CalendarRange",
+        roles: [ROLE.SITE_ADMIN],
+      },
+      {
+        title: "Periods",
+        url: "/attendance/periods",
+        icon: "LockKeyhole",
+        roles: [ROLE.SITE_ADMIN],
+      },
+      {
         title: "Attendance tools",
         url: "/attendance/tools",
         icon: "Wrench",

@@ -15,3 +15,25 @@ export function getErrorMessage(error: unknown): string {
 
   return "Something went wrong. Please try again.";
 }
+
+function describeDetail(entry: unknown): string {
+  if (typeof entry === "string") return entry;
+  if (entry && typeof entry === "object") {
+    return Object.entries(entry)
+      .map(([key, value]) => `${key}: ${String(value)}`)
+      .join(", ");
+  }
+  return String(entry ?? "");
+}
+
+/** The refusal list an envelope can carry beside its message. A refused period
+ *  lock is the one place it is populated, and that list is the fix-it worklist,
+ *  so it has to reach the screen rather than being flattened into a toast. */
+export function getErrorDetails(error: unknown): string[] {
+  if (!axios.isAxiosError(error)) return [];
+
+  const details = (error.response?.data as { errors?: unknown } | undefined)?.errors;
+  if (!Array.isArray(details)) return [];
+
+  return details.map(describeDetail).filter(Boolean);
+}
