@@ -4,11 +4,6 @@
 @import "@fontsource-variable/instrument-sans";
 @import "@fontsource/instrument-serif";
 @import "@fontsource-variable/jetbrains-mono";
-/* Tailwind v4 follows .gitignore for content detection, so it never looks in
-   node_modules. The form toolkit ships utility classes in its bundle and needs
-   pointing at explicitly or its fields render structurally but unstyled. */
-@source "../node_modules/@akinurrahman/form/dist";
-
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 /* ---------- 1. Raw Cyanotype tokens ---------- */
@@ -391,10 +386,9 @@
 }
 
 /* ---------- 7. Form field adaptation ---------- */
-/* @akinurrahman/form ships shadcn defaults: 14px sentence-case labels, 12px
-   radii, and a `bg-input-bg` token this theme never defines, so its inputs
-   render with no background at all. Its label, description and message
-   elements take no className, so the retune has to live here.
+/* The field shell renders its label, description and message without a
+   className hook, so this theme's retune of the shadcn defaults - 14px
+   sentence-case labels and 12px radii - has to live here.
 
    Deliberately unlayered: Tailwind utilities sit in @layer utilities, and a
    layered rule always loses to an unlayered one regardless of specificity.
@@ -440,9 +434,10 @@
    radii or two backgrounds. */
 [data-slot='form-item']
   :is(
-    input:not([type='checkbox']),
+    input:not([type='checkbox'], [data-slot='combobox-input']),
     [data-slot='select-trigger'],
     [data-slot='date-picker-trigger'],
+    [data-slot='combobox-chips'],
     [role='combobox']
   ) {
   border-radius: var(--radius-lg);
@@ -454,7 +449,7 @@
 /* 40px is the touch target, dropping to the 36px desktop scale from sm up. */
 [data-slot='form-item']
   :is(
-    input:not([type='checkbox']),
+    input:not([type='checkbox'], [data-slot='combobox-input']),
     [data-slot='select-trigger'],
     [data-slot='date-picker-trigger']
   ) {
@@ -463,7 +458,7 @@
 
 /* The multi select grows with its chips, so it gets a floor rather than a
    height - pinning it would clip the second row of selections. */
-[data-slot='form-item'] [role='combobox'] {
+[data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
   min-height: 2.5rem;
   height: auto;
 }
@@ -477,14 +472,14 @@
 @media (width >= 40rem) {
   [data-slot='form-item']
     :is(
-      input:not([type='checkbox']),
+      input:not([type='checkbox'], [data-slot='combobox-input']),
       [data-slot='select-trigger'],
       [data-slot='date-picker-trigger']
     ) {
     height: 2.25rem;
   }
 
-  [data-slot='form-item'] [role='combobox'] {
+  [data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
     min-height: 2.25rem;
   }
 }

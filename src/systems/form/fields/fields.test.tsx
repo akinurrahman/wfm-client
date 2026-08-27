@@ -3,15 +3,15 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
-import { Form } from '@akinurrahman/form';
+import { Form } from '../form';
 
 import { SwitchField } from './switch-field';
 import { TagsField } from './tags-field';
 import { TimeField } from './time-field';
 
-/** These fields are built on react-hook-form directly rather than on the
- *  toolkit's FieldWrapper, which v0.0.2 does not actually export. The point of
- *  these tests is that they still join the same form context. */
+/** These fields read react-hook-form through FieldShell rather than a Controller
+ *  render prop. The point of these tests is that they still join the same form
+ *  context and submit alongside everything else. */
 const schema = z.object({
   names: z.array(z.string()).min(1, 'Add at least one name').max(2, 'At most two names'),
   startTime: z.string().regex(/^([01][0-9]|2[0-3]):[0-5][0-9]$/, 'Enter a time like 09:00'),

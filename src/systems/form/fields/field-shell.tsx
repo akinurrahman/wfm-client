@@ -1,15 +1,18 @@
 import { useId } from 'react';
 
-import { useController } from 'react-hook-form';
+import { useController, type RefCallBack } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
 
 type RenderArgs<T> = {
   /** Belongs on the control itself, so the label focuses it. */
   id: string;
+  name: string;
   value: T | undefined;
   onChange: (value: T | undefined) => void;
   onBlur: () => void;
+  /** Lets react-hook-form focus this control when its own validation fails. */
+  ref: RefCallBack;
   invalid: boolean;
   describedBy: string;
   /** Only needed by a field that renders its own description rather than
@@ -23,20 +26,23 @@ type Props<T> = {
   description?: string;
   required?: boolean;
   className?: string;
+  /** Set by a cascading field while a parent is still empty. The field stays
+   *  registered so its value still submits and resets. */
+  hidden?: boolean;
   children: (args: RenderArgs<T>) => React.ReactNode;
 };
 
-/** Mirrors the label / description / message shell that @akinurrahman/form
- *  renders internally, so a field this project adds is indistinguishable from
- *  one the package ships. The package's own FieldWrapper is documented as
- *  exported but is not in the v0.0.2 bundle, so this reads react-hook-form
- *  directly instead. */
+/** The label, description and message frame every field in this app shares.
+ *  Fields read react-hook-form through `useController` rather than a Controller
+ *  render prop, so a control gets `id` and `aria-describedby` handed to it
+ *  directly instead of through a slot that guesses which child to forward to. */
 export function FieldShell<T>({
   name,
   label,
   description,
   required,
   className,
+  hidden,
   children,
 }: Props<T>) {
   const id = useId();
@@ -45,6 +51,8 @@ export function FieldShell<T>({
   const descriptionId = `${id}-description`;
   const messageId = `${id}-message`;
   const error = fieldState.error?.message;
+
+  if (hidden) return null;
 
   return (
     <div data-slot="form-item" className={cn('grid gap-2', className)}>
@@ -66,9 +74,11 @@ export function FieldShell<T>({
 
       {children({
         id,
+        name: field.name,
         value: field.value as T | undefined,
         onChange: field.onChange,
         onBlur: field.onBlur,
+        ref: field.ref,
         invalid: Boolean(error),
         describedBy: error ? `${descriptionId} ${messageId}` : descriptionId,
         descriptionId,

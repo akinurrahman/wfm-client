@@ -1,4 +1,3 @@
-import { Form } from '@akinurrahman/form';
 import type { DefaultValues, FieldValues, UseFormReturn } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -11,6 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
+import { Form } from './form';
 import { FormActions } from './form-actions';
 
 type Props<TValues extends FieldValues> = {
