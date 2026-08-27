@@ -1,3 +1,4 @@
+export { FilterAsyncSelect } from './components/filter-async-select';
 export { FilterField } from './components/filter-field';
 export { FilterPopover } from './components/filter-popover';
 export { FilterSelect } from './components/filter-select';

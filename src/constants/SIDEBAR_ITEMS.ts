@@ -52,6 +52,12 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
         icon: "Wrench",
         roles: [ROLE.SITE_ADMIN],
       },
+      {
+        title: "Leave",
+        url: "/leave",
+        icon: "CalendarOff",
+        roles: [ROLE.SITE_ADMIN],
+      },
     ],
   },
   {

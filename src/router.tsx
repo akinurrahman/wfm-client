@@ -11,6 +11,7 @@ import { dashboardRoutes } from '@/features/dashboard';
 import { designationRoutes } from '@/features/designations';
 import { employeeRoutes } from '@/features/employees';
 import { holidayRoutes } from '@/features/holidays';
+import { leaveRoutes } from '@/features/leave';
 import { shiftRoutes } from '@/features/shifts';
 
 
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       ...holidayRoutes,
       ...employeeRoutes,
       ...attendanceRoutes,
+      ...leaveRoutes,
     ],
   },
 

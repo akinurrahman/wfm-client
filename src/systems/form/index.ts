@@ -9,6 +9,7 @@ export type { AsyncFetchArgs, AsyncFetchFn, AsyncFetchResult, BaseFieldProps, Op
 export { FormActions } from './form-actions';
 export { FormSheet } from './form-sheet';
 
+export { AsyncCombobox } from './controls/async-combobox';
 export { AsyncSelectField } from './fields/async-select-field';
 export { ChoiceField } from './fields/choice-field';
 export type { ChoiceOption } from './fields/choice-field';

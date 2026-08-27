@@ -11,13 +11,11 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-  ComboboxSearch,
   ComboboxStatus,
-  ComboboxTrigger,
-  ComboboxTriggerText,
 } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
 
+import { AsyncCombobox } from '../controls/async-combobox';
 import { useAsyncOptions } from '../hooks/use-async-options';
 import { useCascade } from '../hooks/use-cascade';
 import { gatedText } from '../lib/cascade';
@@ -67,24 +65,11 @@ function AsyncSingleSelectField({
   debounceMs,
   initialSelectedOptions,
 }: SingleProps) {
-  const [open, setOpen] = useState(false);
   const { parentValue, parentValues, dependsOnList, gated } = useCascade({
     name,
     dependsOn,
     emptyValue: '',
   });
-
-  const { options, hasMore, loading, search, setSearch, loadMore, getLabel } = useAsyncOptions({
-    fetchOptions,
-    parentValue,
-    parentValues,
-    enabled: open && !gated,
-    pageSize,
-    debounceMs,
-    initialOptions: initialSelectedOptions,
-  });
-
-  const items = options.map(option => option.value);
 
   return (
     <FieldShell<string>
@@ -96,46 +81,22 @@ function AsyncSingleSelectField({
       hidden={gated && !alwaysVisible}
     >
       {({ id, value, onChange, invalid, describedBy }) => (
-        <Combobox
-          items={items}
-          itemToStringLabel={getLabel}
-          // The server already searched, so filtering the page again locally
-          // would hide results it deliberately returned.
-          filter={null}
-          value={value || null}
-          onValueChange={next => onChange(next ?? '')}
-          open={open}
-          onOpenChange={setOpen}
-          inputValue={search}
-          onInputValueChange={setSearch}
+        <AsyncCombobox
+          id={id}
+          value={value}
+          onChange={onChange}
+          fetchOptions={fetchOptions}
+          parentValue={parentValue}
+          parentValues={parentValues}
+          placeholder={gated ? gatedText(dependsOnList) : placeholder}
+          initialOptions={initialSelectedOptions}
+          pageSize={pageSize}
+          debounceMs={debounceMs}
           disabled={disabled || gated}
-        >
-          <ComboboxTrigger
-            id={id}
-            aria-invalid={invalid}
-            aria-describedby={describedBy}
-            className={cn('h-10 sm:h-9', className)}
-          >
-            <ComboboxTriggerText placeholder={!value}>
-              {gated ? gatedText(dependsOnList) : value ? getLabel(value) : placeholder}
-            </ComboboxTriggerText>
-          </ComboboxTrigger>
-
-          <ComboboxContent>
-            <ComboboxSearch placeholder="Search..." />
-            <ComboboxEmpty>{loading || options.length ? null : 'No results.'}</ComboboxEmpty>
-            <ComboboxList onScroll={handleScroll(hasMore, loading, loadMore)}>
-              {(item: string) => (
-                <ComboboxItem key={item} value={item}>
-                  {getLabel(item)}
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-            <ComboboxStatus>
-              {loading ? <Loader2 className="size-4 animate-spin" /> : null}
-            </ComboboxStatus>
-          </ComboboxContent>
-        </Combobox>
+          invalid={invalid}
+          describedBy={describedBy}
+          className={cn('h-10 sm:h-9', className)}
+        />
       )}
     </FieldShell>
   );
