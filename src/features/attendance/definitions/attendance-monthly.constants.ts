@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { addMonths, format } from 'date-fns';
 
 import { defineUrlFilters, pagingSpec } from '@/systems/filters';
 
@@ -36,6 +36,13 @@ export const MONTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
  *  window: a 26th-to-25th cycle labelled August starts in July. */
 export const cycleLabel = (year: number, month: number) =>
   format(new Date(year, month - 1, 1), 'MMMM yyyy');
+
+/** Steps a year and month label together, so December steps to January of the
+ *  next year rather than to month 13. */
+export const shiftCycle = (year: number, month: number, delta: number) => {
+  const next = addMonths(new Date(year, month - 1, 1), delta);
+  return { year: next.getFullYear(), month: next.getMonth() + 1 };
+};
 
 /** Both bounds are resolved once per mount, so a tab left open across a month
  *  boundary does not silently start reading a different cycle mid-review. */

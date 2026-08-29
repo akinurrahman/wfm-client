@@ -19,6 +19,12 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
         roles: [ROLE.EMPLOYEE],
       },
       {
+        title: "My attendance",
+        url: "/my-attendance",
+        icon: "CalendarRange",
+        roles: [ROLE.EMPLOYEE],
+      },
+      {
         title: "My leave",
         url: "/my-leave",
         icon: "CalendarOff",

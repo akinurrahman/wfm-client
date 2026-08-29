@@ -2,6 +2,12 @@ import type { RouteObject } from 'react-router';
 
 export const attendanceRoutes: RouteObject[] = [
   {
+    path: '/my-attendance',
+    lazy: async () => ({
+      Component: (await import('./pages/my-attendance/my-attendance-page')).default,
+    }),
+  },
+  {
     path: '/attendance',
     lazy: async () => ({
       Component: (await import('./pages/roster/roster-page')).default,
