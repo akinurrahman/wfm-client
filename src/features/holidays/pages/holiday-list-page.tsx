@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
+import { USER_ROLES } from '@/constants/ROLES';
 import { formatDate } from '@/lib/format';
 import { toCalendarDate } from '@/lib/time';
+import { useAuthStore } from '@/stores/auth.store';
 import { useConfirmation } from '@/systems/confirmation/hooks/use-confirmation';
 import { FilterSelect, useUrlFilters } from '@/systems/filters';
 import { DataTable, type ColumnDef } from '@/systems/table/data-table';
@@ -29,6 +31,11 @@ export default function HolidayListPage() {
   const { filters, setFilter, isFiltered, resetFilters } = useUrlFilters(HOLIDAY_FILTER_SPEC);
   const [editing, setEditing] = useState<Holiday | 'new' | null>(null);
 
+  // Employees read this calendar so their own attendance makes sense. The
+  // calendar itself is the admin's to write.
+  const role = useAuthStore(s => s.user?.role);
+  const canManage = role === USER_ROLES.keys.SITE_ADMIN;
+
   const { data, isLoading, isError, refetch } = useHolidayList(filters);
   const deleteHoliday = useDeleteHoliday();
   const { confirm } = useConfirmation<Holiday>();
@@ -48,8 +55,8 @@ export default function HolidayListPage() {
       onConfirm: item => deleteHoliday.mutateAsync(item.id).then(() => undefined, () => undefined),
     });
 
-  const columns = useMemo<ColumnDef<Holiday>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<Holiday>[]>(() => {
+    const base: ColumnDef<Holiday>[] = [
       {
         accessorKey: 'date',
         header: 'Date',
@@ -87,6 +94,12 @@ export default function HolidayListPage() {
           </Badge>
         ),
       },
+    ];
+
+    if (!canManage) return base;
+
+    return [
+      ...base,
       {
         id: 'actions',
         header: '',
@@ -100,16 +113,19 @@ export default function HolidayListPage() {
           />
         ),
       },
-    ],
+    ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [deleteHoliday, confirm]
-  );
+  }, [deleteHoliday, confirm, canManage]);
 
   return (
     <div className="pb-4">
       <PageHeader
         title="Holidays"
-        description="The company calendar. Days listed here are not working days, unless marked optional."
+        description={
+          canManage
+            ? 'The company calendar. Days listed here are not working days, unless marked optional.'
+            : 'The company calendar. Days listed here are not working days, unless marked optional. Your admin sets it.'
+        }
       />
 
       {isError ? (
@@ -120,13 +136,15 @@ export default function HolidayListPage() {
             isFiltered={isFiltered}
             onReset={resetFilters}
             actions={
-              <Button
-                className="m-brand-fill h-10 w-full sm:h-8 sm:w-auto"
-                onClick={() => setEditing('new')}
-              >
-                <Plus />
-                New holiday
-              </Button>
+              canManage ? (
+                <Button
+                  className="m-brand-fill h-10 w-full sm:h-8 sm:w-auto"
+                  onClick={() => setEditing('new')}
+                >
+                  <Plus />
+                  New holiday
+                </Button>
+              ) : undefined
             }
           >
             <FilterSelect
@@ -154,12 +172,18 @@ export default function HolidayListPage() {
               <EmptyState
                 icon={CalendarDays}
                 title={`No holidays in ${filters.year}`}
-                description="Add the public holidays for the year so attendance and payroll agree on which days are off."
+                description={
+                  canManage
+                    ? 'Add the public holidays for the year so attendance and payroll agree on which days are off.'
+                    : 'Nothing has been published for this year yet. Your admin adds them.'
+                }
                 action={
-                  <Button size="sm" className="m-brand-fill" onClick={() => setEditing('new')}>
-                    <Plus />
-                    New holiday
-                  </Button>
+                  canManage ? (
+                    <Button size="sm" className="m-brand-fill" onClick={() => setEditing('new')}>
+                      <Plus />
+                      New holiday
+                    </Button>
+                  ) : undefined
                 }
               />
             }
@@ -173,11 +197,13 @@ export default function HolidayListPage() {
         </>
       )}
 
-      <HolidayFormSheet
-        open={editing !== null}
-        holiday={editing === 'new' ? undefined : (editing ?? undefined)}
-        onOpenChange={open => setEditing(open ? editing : null)}
-      />
+      {canManage ? (
+        <HolidayFormSheet
+          open={editing !== null}
+          holiday={editing === 'new' ? undefined : (editing ?? undefined)}
+          onOpenChange={open => setEditing(open ? editing : null)}
+        />
+      ) : null}
     </div>
   );
 }
