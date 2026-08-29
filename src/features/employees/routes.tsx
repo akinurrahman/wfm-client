@@ -2,6 +2,12 @@ import type { RouteObject } from 'react-router';
 
 export const employeeRoutes: RouteObject[] = [
   {
+    path: '/profile',
+    lazy: async () => ({
+      Component: (await import('./pages/me/my-profile-page')).default,
+    }),
+  },
+  {
     path: '/employees',
     lazy: async () => ({
       Component: (await import('./pages/employees/employee-list-page')).default,

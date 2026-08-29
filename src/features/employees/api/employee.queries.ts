@@ -12,8 +12,14 @@ export function useEmployeeList(filters: EmployeeFilters) {
   });
 }
 
-/** One call backs the whole profile: the sub-resources have no GET routes of
- *  their own, so every tab reads this record. */
+
+export function useMyProfile() {
+  return useQuery({
+    queryKey: EMPLOYEE_KEYS.me(),
+    queryFn: ({ signal }) => employeeApi.getMe(signal),
+  });
+}
+
 export function useEmployee(id: string) {
   return useQuery({
     queryKey: EMPLOYEE_KEYS.detail(id),

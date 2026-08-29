@@ -7,7 +7,7 @@ import { ProfileSectionView } from './profile-section-view';
 
 type Props = {
   records: EmploymentHistory[];
-  onEdit: () => void;
+  onEdit?: () => void;
 };
 
 export function EmploymentHistoryView({ records, onEdit }: Props) {

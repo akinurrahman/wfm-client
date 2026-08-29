@@ -9,6 +9,7 @@ export const EMPLOYEE_KEYS = {
   list: (filters: EmployeeFilters) => [...EMPLOYEE_KEYS.lists(), filters] as const,
   details: () => [...EMPLOYEE_KEYS.all, 'detail'] as const,
   detail: (id: string) => [...EMPLOYEE_KEYS.details(), id] as const,
+  me: () => [...EMPLOYEE_KEYS.all, 'me'] as const,
 };
 
 /** The API reads `isActive` as the strings "true"/"false", so the filter holds

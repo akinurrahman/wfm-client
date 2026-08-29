@@ -7,7 +7,7 @@ import { ProfileSectionView } from './profile-section-view';
 
 type Props = {
   records: EducationRecord[];
-  onEdit: () => void;
+  onEdit?: () => void;
 };
 
 export function EducationView({ records, onEdit }: Props) {

@@ -12,7 +12,7 @@ import { ProfileSectionView } from './profile-section-view';
 
 type Props = {
   familyInfo: FamilyInfo | null;
-  onEdit: () => void;
+  onEdit?: () => void;
 };
 
 export function FamilyInfoView({ familyInfo, onEdit }: Props) {

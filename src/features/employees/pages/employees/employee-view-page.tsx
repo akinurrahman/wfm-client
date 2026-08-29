@@ -6,7 +6,6 @@ import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useShiftOptions } from '@/features/shifts';
 import { formatDate } from '@/lib/format';
@@ -20,6 +19,7 @@ import { EmployeeOverview } from '../../components/profile/employee-overview';
 import { EmploymentHistoryView } from '../../components/profile/employment-history-view';
 import { FamilyInfoView } from '../../components/profile/family-info-view';
 import { GovtIdsView } from '../../components/profile/govt-ids-view';
+import { ProfileSkeleton } from '../../components/profile/profile-skeleton';
 import { VIEW_TABS, VIEW_TAB_SPEC } from '../../definitions/employee-profile.constants';
 import type { EmployeeDetail } from '../../definitions/employee.types';
 
@@ -164,24 +164,6 @@ function Fact({ label, children }: { label: string; children: React.ReactNode })
     <div className="min-w-0">
       <p className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</p>
       <div className="mt-1">{children}</div>
-    </div>
-  );
-}
-
-function ProfileSkeleton() {
-  return (
-    <div className="space-y-4 pb-4">
-      <Skeleton className="h-16 w-full rounded-lg" />
-      <Skeleton className="h-9 w-full" />
-      <div className="m-panel m-panel-shine space-y-4 p-5">
-        <Skeleton className="h-3 w-24" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-      </div>
     </div>
   );
 }

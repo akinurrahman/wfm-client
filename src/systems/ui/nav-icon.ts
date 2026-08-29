@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   LockKeyhole,
   Star,
+  UserCircle,
   Users,
   Wrench,
   type LucideIcon,
@@ -27,6 +28,7 @@ export const NAV_ICONS: Record<string, LucideIcon> = {
   CalendarRange,
   LayoutDashboard,
   LockKeyhole,
+  UserCircle,
   Users,
   Wrench,
 };

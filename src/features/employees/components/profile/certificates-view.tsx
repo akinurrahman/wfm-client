@@ -7,7 +7,7 @@ import { ProfileSectionView } from './profile-section-view';
 
 type Props = {
   records: Certificate[];
-  onEdit: () => void;
+  onEdit?: () => void;
 };
 
 export function CertificatesView({ records, onEdit }: Props) {

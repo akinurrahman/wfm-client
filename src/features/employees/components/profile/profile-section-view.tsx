@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/button';
 type Props = {
   title: string;
   description?: string;
-  /** Nothing has been recorded yet, so the section offers to start it instead
-   *  of showing an empty shell. */
   isEmpty: boolean;
   emptyIcon: React.ComponentType<{ className?: string }>;
   emptyTitle: string;
   emptyDescription: string;
-  onEdit: () => void;
+  onEdit?: () => void;
   children: React.ReactNode;
 };
+
+const READ_ONLY_EMPTY_DESCRIPTION = 'HR keeps this section. Ask them to add it to your record.';
 
 /** The read side of one profile section. Editing lives on its own screen, so
  *  this only reads the record back and points at where it is changed. */
@@ -36,7 +36,7 @@ export function ProfileSectionView({
           {description ? <p className="mt-1 text-[13px] text-text-mid">{description}</p> : null}
         </div>
 
-        {isEmpty ? null : (
+        {isEmpty || !onEdit ? null : (
           <Button variant="outline" size="sm" className="shrink-0" onClick={onEdit}>
             <Pencil />
             Edit
@@ -48,12 +48,14 @@ export function ProfileSectionView({
         <EmptyState
           icon={emptyIcon}
           title={emptyTitle}
-          description={emptyDescription}
+          description={onEdit ? emptyDescription : READ_ONLY_EMPTY_DESCRIPTION}
           action={
-            <Button size="sm" className="m-brand-fill" onClick={onEdit}>
-              <Plus />
-              Add details
-            </Button>
+            onEdit ? (
+              <Button size="sm" className="m-brand-fill" onClick={onEdit}>
+                <Plus />
+                Add details
+              </Button>
+            ) : null
           }
         />
       ) : (

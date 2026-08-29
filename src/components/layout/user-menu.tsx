@@ -63,7 +63,7 @@ export function UserMenu() {
                 <div className="my-1 h-px bg-hairline" />
 
                 <DropdownMenuItem
-                    onClick={() => navigate('/customers')}
+                    onClick={() => navigate('/profile')}
                     className="gap-2.5 rounded-md px-2 py-2 text-[13px] text-text-hi focus:bg-surface-3"
                 >
                     <UserCircle className="size-4 text-text-mid" />

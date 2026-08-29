@@ -16,6 +16,12 @@ export function getErrorMessage(error: unknown): string {
   return "Something went wrong. Please try again.";
 }
 
+/** Lets a screen tell one refusal from another - a 403 on a `me/*` route is a
+ *  missing profile to explain, not a failure to retry. */
+export function getErrorStatus(error: unknown): number | undefined {
+  return axios.isAxiosError(error) ? error.response?.status : undefined;
+}
+
 function describeDetail(entry: unknown): string {
   if (typeof entry === "string") return entry;
   if (entry && typeof entry === "object") {

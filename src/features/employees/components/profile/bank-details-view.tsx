@@ -1,15 +1,18 @@
 import { Landmark } from 'lucide-react';
 
+import { MaskedValue } from '@/systems/ui/masked-value';
+
 import type { BankDetails } from '../../definitions/employee-profile.types';
 import { DetailList } from './detail-list';
 import { ProfileSectionView } from './profile-section-view';
 
 type Props = {
   bankDetails: BankDetails | null;
-  onEdit: () => void;
+  onEdit?: () => void;
+  maskSensitive?: boolean;
 };
 
-export function BankDetailsView({ bankDetails, onEdit }: Props) {
+export function BankDetailsView({ bankDetails, onEdit, maskSensitive = false }: Props) {
   return (
     <ProfileSectionView
       title="Bank"
@@ -26,7 +29,9 @@ export function BankDetailsView({ bankDetails, onEdit }: Props) {
             { label: 'Account holder', value: bankDetails.accountHolder },
             {
               label: 'Account number',
-              value: (
+              value: maskSensitive ? (
+                <MaskedValue value={bankDetails.accountNo} label="account number" />
+              ) : (
                 <span data-numeric className="font-mono">
                   {bankDetails.accountNo}
                 </span>

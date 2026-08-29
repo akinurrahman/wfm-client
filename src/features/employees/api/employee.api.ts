@@ -16,6 +16,9 @@ export const employeeApi = {
       signal,
     }),
 
+  getMe: (signal?: AbortSignal) =>
+    apiCall<ApiResponse<EmployeeDetail>>('/employees/me', { signal }),
+
   getById: (id: string, signal?: AbortSignal) =>
     apiCall<ApiResponse<EmployeeDetail>>(`/employees/${id}`, { signal, version: 'root' }),
 
