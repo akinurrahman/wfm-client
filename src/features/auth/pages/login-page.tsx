@@ -1,4 +1,5 @@
 import { CalendarRange } from 'lucide-react';
+import { useSearchParams } from 'react-router';
 
 import { APP_NAME } from '@/constants';
 
@@ -8,6 +9,13 @@ import { LoginForm } from '../components/login-form';
 const CAPABILITIES = ['Scheduling', 'Timesheets', 'Coverage', 'Approvals'];
 
 export default function LoginPage() {
+  const [searchParams] = useSearchParams();
+
+  // The demo landing page deep-links here with a seeded account attached.
+  const email = searchParams.get('email');
+  const password = searchParams.get('password');
+  const prefill = email && password ? { email, password } : undefined;
+
   return (
     <main className="flex min-h-svh flex-col desk:grid desk:grid-cols-[1.1fr_minmax(24rem,31rem)]">
       {/* Below desk this is the band the form card tucks into. From desk up it
@@ -82,7 +90,13 @@ export default function LoginPage() {
 
           <div className="my-6 h-px bg-hairline sm:my-7 desk:my-8" />
 
-          <LoginForm />
+          {prefill ? (
+            <p className="mb-5 rounded-lg border border-brand-line bg-brand-soft px-3 py-2.5 text-[12px] leading-snug text-text-mid">
+              Demo credentials filled in for you. Press sign in to continue.
+            </p>
+          ) : null}
+
+          <LoginForm initialValues={prefill} />
 
           {/* The sign-in copy above already says accounts come from the admin,
               so this repeat is the first thing to go when height is scarce. */}

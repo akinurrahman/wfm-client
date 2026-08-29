@@ -20,10 +20,17 @@ const EMPTY_VALUES: LoginFormValues = { email: '', password: '' };
 const FIELD_CLASS =
   'h-11 rounded-lg border-hairline-strong bg-surface-2 px-3.5 text-sm transition-colors placeholder:text-text-low';
 
-export function LoginForm() {
+type Props = {
+  /** Prefilled by the demo landing page so a visitor only has to press submit. */
+  initialValues?: LoginFormValues;
+};
+
+export function LoginForm({ initialValues }: Props) {
   const login = useLogin();
 
-  const [values, setValues] = useState<LoginFormValues>(EMPTY_VALUES);
+  const [values, setValues] = useState<LoginFormValues>(
+    initialValues ?? EMPTY_VALUES,
+  );
   const [errors, setErrors] = useState<FieldErrors>({});
   const [revealed, setRevealed] = useState(false);
   const [capsLock, setCapsLock] = useState(false);
@@ -57,7 +64,7 @@ export function LoginForm() {
           id="email"
           type="email"
           autoComplete="username"
-          autoFocus
+          autoFocus={!initialValues?.email}
           placeholder="you@company.com"
           value={values.email}
           aria-invalid={Boolean(errors.email)}

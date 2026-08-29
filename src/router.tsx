@@ -12,6 +12,7 @@ import { dashboardRoutes } from '@/features/dashboard';
 import { designationRoutes } from '@/features/designations';
 import { employeeRoutes } from '@/features/employees';
 import { holidayRoutes } from '@/features/holidays';
+import { landingRoutes } from '@/features/landing';
 import { leaveRoutes } from '@/features/leave';
 import { shiftRoutes } from '@/features/shifts';
 
@@ -42,7 +43,7 @@ export const router = createBrowserRouter([
         ],
       },
 
-      /* Standalone */
+      ...landingRoutes,
       { path: '/access-denied', element: <AccessDeniedPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
