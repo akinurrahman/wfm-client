@@ -22,6 +22,11 @@ export type PlannedAbsence = {
   reason: string;
   status: PlannedAbsenceStatus;
   approvedById: string | null;
+  approvedAt: string | null;
+  rejectedById: string | null;
+  rejectedAt: string | null;
+  rejectReason: string | null;
+  cancelledAt: string | null;
   cancelReason: string | null;
   createdAt: string;
   updatedAt: string;
@@ -64,6 +69,12 @@ export type PlannedAbsenceResult = {
 
 export type PlannedAbsenceCancelPayload = {
   cancelReason: string;
+};
+
+/** A rejection is filed against the request, so the employee reads why rather
+ *  than finding the row simply gone. */
+export type PlannedAbsenceRejectPayload = {
+  rejectReason: string;
 };
 
 /** `reverted` days went back to ABSENT, or to PRESENT where the punches say the

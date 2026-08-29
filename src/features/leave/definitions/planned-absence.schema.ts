@@ -4,6 +4,7 @@ import { REASON_MAX } from './planned-absence.constants';
 import type {
   PlannedAbsenceCancelPayload,
   PlannedAbsencePayload,
+  PlannedAbsenceRejectPayload,
 } from './planned-absence.types';
 
 export const plannedAbsenceFormSchema = z
@@ -55,4 +56,20 @@ export const toCancelPayload = (
   values: PlannedAbsenceCancelValues
 ): PlannedAbsenceCancelPayload => ({
   cancelReason: values.cancelReason.trim(),
+});
+
+export const plannedAbsenceRejectSchema = z.object({
+  rejectReason: z
+    .string()
+    .trim()
+    .min(1, { error: 'Say why the request is being turned down' })
+    .max(REASON_MAX, { error: `Keep this under ${REASON_MAX} characters` }),
+});
+
+export type PlannedAbsenceRejectValues = z.infer<typeof plannedAbsenceRejectSchema>;
+
+export const toRejectPayload = (
+  values: PlannedAbsenceRejectValues
+): PlannedAbsenceRejectPayload => ({
+  rejectReason: values.rejectReason.trim(),
 });

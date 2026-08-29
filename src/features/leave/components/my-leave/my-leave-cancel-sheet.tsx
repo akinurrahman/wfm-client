@@ -1,13 +1,13 @@
 import { FormSheet, TextareaField } from '@/systems/form';
 
-import { useCancelPlannedAbsence } from '../../api/planned-absence.mutations';
+import { useCancelMyLeave } from '../../api/my-leave.mutations';
 import { REASON_MAX } from '../../definitions/planned-absence.constants';
+import { plannedAbsenceStatusLookup } from '../../definitions/planned-absence.lookup';
 import {
   plannedAbsenceCancelSchema,
   toCancelPayload,
   type PlannedAbsenceCancelValues,
 } from '../../definitions/planned-absence.schema';
-import { plannedAbsenceStatusLookup } from '../../definitions/planned-absence.lookup';
 import type { PlannedAbsence } from '../../definitions/planned-absence.types';
 import { AbsenceFacts } from '../absence-facts';
 
@@ -19,14 +19,14 @@ type Props = {
 
 const defaultValues = { cancelReason: '' };
 
-const APPROVED_DESCRIPTION =
-  'The record is kept, not deleted: attendance rows point back at it. Days sitting on leave go back to absent, or to present where the punches say the person worked.';
-
 const PENDING_DESCRIPTION =
-  'Nothing was approved, so no attendance day moves. The request is closed and the reason stays on it.';
+  'Nothing was approved yet, so no attendance day changes. The request closes and your admin sees it withdrawn.';
 
-export function PlannedAbsenceCancelSheet({ open, onOpenChange, absence }: Props) {
-  const cancelAbsence = useCancelPlannedAbsence();
+const APPROVED_DESCRIPTION =
+  'This leave was already approved, so the days go back to how they stood: absent, or present where your punches say you worked.';
+
+export function MyLeaveCancelSheet({ open, onOpenChange, absence }: Props) {
+  const cancelMyLeave = useCancelMyLeave();
 
   const isPendingRequest = absence?.status === plannedAbsenceStatusLookup.keys.PENDING;
 
@@ -35,17 +35,17 @@ export function PlannedAbsenceCancelSheet({ open, onOpenChange, absence }: Props
       open={open}
       onOpenChange={onOpenChange}
       formKey={absence?.id ?? 'none'}
-      title="Withdraw leave"
+      title="Withdraw request"
       description={isPendingRequest ? PENDING_DESCRIPTION : APPROVED_DESCRIPTION}
       schema={plannedAbsenceCancelSchema}
       defaultValues={defaultValues}
-      submitLabel="Withdraw leave"
+      submitLabel="Withdraw request"
       pendingLabel="Withdrawing"
-      isPending={cancelAbsence.isPending}
+      isPending={cancelMyLeave.isPending}
       onSubmit={values => {
         if (!absence) return;
 
-        cancelAbsence.mutate(
+        cancelMyLeave.mutate(
           { id: absence.id, payload: toCancelPayload(values) },
           { onSuccess: () => onOpenChange(false) }
         );
@@ -55,10 +55,10 @@ export function PlannedAbsenceCancelSheet({ open, onOpenChange, absence }: Props
 
       <TextareaField
         name="cancelReason"
-        label="Why it is being withdrawn"
-        placeholder="Employee withdrew the request"
+        label="Why you are withdrawing it"
+        placeholder="Plans changed, no longer taking these days"
         maxLength={REASON_MAX}
-        description="Kept on the record, so a reverted day can be explained later."
+        description="Stays on the request, so the change is explained later."
         required
       />
     </FormSheet>

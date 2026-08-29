@@ -3,18 +3,27 @@ import { toast } from 'sonner';
 
 import { ATTENDANCE_KEYS } from '@/features/attendance';
 
+import { MY_LEAVE_KEYS } from '../definitions/my-leave.constants';
 import { PLANNED_ABSENCE_KEYS } from '../definitions/planned-absence.constants';
 import type {
   PlannedAbsenceCancelPayload,
   PlannedAbsencePayload,
+  PlannedAbsenceRejectPayload,
 } from '../definitions/planned-absence.types';
 import { plannedAbsenceApi } from './planned-absence.api';
 
-/** Both writes retro-convert days that were already closed, so the whole
- *  attendance branch goes with them: the roster, the monthly sheet and the day
- *  summaries all read rows this just rewrote. */
-function invalidateLeaveAndAttendance(qc: ReturnType<typeof useQueryClient>) {
+/** The decision lands on a row the employee is also looking at, through the
+ *  `me` route and its own cache. */
+function invalidateBothLeaveLists(qc: ReturnType<typeof useQueryClient>) {
   qc.invalidateQueries({ queryKey: PLANNED_ABSENCE_KEYS.lists() });
+  qc.invalidateQueries({ queryKey: MY_LEAVE_KEYS.lists() });
+}
+
+/** Writes that retro-convert days take the whole attendance branch with them:
+ *  the roster, the monthly sheet and the day summaries all read rows this just
+ *  rewrote. */
+function invalidateLeaveAndAttendance(qc: ReturnType<typeof useQueryClient>) {
+  invalidateBothLeaveLists(qc);
   qc.invalidateQueries({ queryKey: ATTENDANCE_KEYS.all });
 }
 
@@ -38,6 +47,37 @@ export function useCreatePlannedAbsence() {
       const { converted, conflicted } = response.data;
       toast.success('Leave recorded', {
         description: outcomeText(converted, 'converted', conflicted),
+      });
+    },
+  });
+}
+
+export function useApprovePlannedAbsence() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => plannedAbsenceApi.approve(id),
+    onSuccess: response => {
+      invalidateLeaveAndAttendance(qc);
+      const { converted, conflicted } = response.data;
+      toast.success('Leave approved', {
+        description: outcomeText(converted, 'converted', conflicted),
+      });
+    },
+  });
+}
+
+export function useRejectPlannedAbsence() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: PlannedAbsenceRejectPayload }) =>
+      plannedAbsenceApi.reject(id, payload),
+    onSuccess: () => {
+      // A pending request had converted nothing, so attendance is untouched.
+      invalidateBothLeaveLists(qc);
+      toast.success('Leave rejected', {
+        description: 'The reason is on the request, so the employee can read it.',
       });
     },
   });

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { CalendarOff, Plus } from 'lucide-react';
 
@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { fetchEmployeeOptions } from '@/features/employees';
+import { useConfirmation } from '@/systems/confirmation/hooks/use-confirmation';
 import {
   FilterAsyncSelect,
   FilterPopover,
@@ -17,10 +18,12 @@ import type { Option } from '@/systems/form';
 import { DataTable } from '@/systems/table/data-table';
 import { FilterBar } from '@/systems/ui/filter-bar';
 
+import { useApprovePlannedAbsence } from '../../api/planned-absence.mutations';
 import { usePlannedAbsenceList } from '../../api/planned-absence.queries';
 import { PlannedAbsenceCancelSheet } from '../../components/planned-absences/planned-absence-cancel-sheet';
 import { plannedAbsenceColumns } from '../../components/planned-absences/planned-absence-columns';
 import { PlannedAbsenceFormSheet } from '../../components/planned-absences/planned-absence-form-sheet';
+import { PlannedAbsenceRejectSheet } from '../../components/planned-absences/planned-absence-reject-sheet';
 
 import { PLANNED_ABSENCE_FILTER_SPEC } from '../../definitions/planned-absence.constants';
 import { plannedAbsenceStatusLookup } from '../../definitions/planned-absence.lookup';
@@ -36,6 +39,30 @@ export default function PlannedAbsenceListPage() {
 
   const [isFiling, setIsFiling] = useState(false);
   const [cancelTarget, setCancelTarget] = useState<PlannedAbsence | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<PlannedAbsence | null>(null);
+
+  const { mutateAsync: approveAbsence } = useApprovePlannedAbsence();
+  const { confirm } = useConfirmation<PlannedAbsence>();
+
+  /** Approving is the write that rewrites closed days, and the 409s it can come
+   *  back with (a locked period, a second approval over the same dates) are not
+   *  worth discovering by accident. */
+  const askApprove = useCallback(
+    (absence: PlannedAbsence) =>
+      confirm({
+        item: absence,
+        title: 'Approve leave',
+        description: item =>
+          `${item.employee?.fullName ?? 'This employee'} goes on leave for the whole window. Days already closed as absent flip to on leave, and any day a punch contradicts is reported back for you to settle.`,
+        variant: 'confirm',
+        onConfirm: item =>
+          approveAbsence(item.id).then(
+            () => undefined,
+            () => undefined
+          ),
+      }),
+    [confirm, approveAbsence]
+  );
 
   /** A shared link arrives with an id and no name. The rows it filtered already
    *  carry that name, so the picker is seeded from them rather than fetching the
@@ -77,17 +104,19 @@ export default function PlannedAbsenceListPage() {
   const columns = useMemo(
     () =>
       plannedAbsenceColumns({
-        pendingId: cancelTarget?.id ?? null,
+        pendingId: cancelTarget?.id ?? rejectTarget?.id ?? null,
+        onApprove: askApprove,
+        onReject: setRejectTarget,
         onCancel: setCancelTarget,
       }),
-    [cancelTarget]
+    [cancelTarget, rejectTarget, askApprove]
   );
 
   return (
     <div className="pb-4">
       <PageHeader
         title="Leave"
-        description="Approved absences, filed after the decision. Filing one rewrites days that are already closed: absences flip to on leave, and days a punch contradicts are reported back rather than guessed at."
+        description="Requests employees file and leave you record yourself. Filter to Pending for the approval queue: a pending request moves no attendance day, approving it is what rewrites days already closed, and days a punch contradicts are reported back rather than guessed at."
       />
 
       {isError ? (
@@ -155,7 +184,7 @@ export default function PlannedAbsenceListPage() {
                 <EmptyState
                   icon={CalendarOff}
                   title="No leave on record"
-                  description="File one when an absence is settled. It can be filed after the fact: days already closed as absent are converted."
+                  description="Nothing has been requested or filed yet. Filing one here records a leave settled offline and approves it in the same step."
                   action={
                     <Button
                       size="sm"
@@ -174,6 +203,12 @@ export default function PlannedAbsenceListPage() {
       )}
 
       <PlannedAbsenceFormSheet open={isFiling} onOpenChange={setIsFiling} />
+
+      <PlannedAbsenceRejectSheet
+        open={rejectTarget !== null}
+        onOpenChange={open => setRejectTarget(open ? rejectTarget : null)}
+        absence={rejectTarget}
+      />
 
       <PlannedAbsenceCancelSheet
         open={cancelTarget !== null}
