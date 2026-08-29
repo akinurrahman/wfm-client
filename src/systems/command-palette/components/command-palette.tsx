@@ -50,8 +50,10 @@ export function CommandPalette() {
         }
     };
 
+    // z-[60] clears the mobile sidebar sheet, which portals in at z-50 after
+    // this node and would otherwise stack over it.
     return (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[12vh]">
+        <div className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-[12vh]">
             <button
                 type="button"
                 aria-label="Close search"

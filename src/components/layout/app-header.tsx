@@ -8,10 +8,11 @@ export function AppHeader() {
     const collapsed = state === 'collapsed';
 
     return (
-        <div className={`flex h-14 items-center gap-2 ${collapsed ? 'justify-center' : ''}`}>
-            {/* pl-5 lines the wordmark up with the nav icons: content px-2 + item px-3 */}
+        <div className={`flex h-12 items-center gap-2 ${collapsed ? 'justify-center' : ''}`}>
+            {/* pl-3 lines the wordmark up with the nav icons: the header's own
+             *  px-2 plus the px-3 each nav row carries */}
             {!collapsed && (
-                <span className="flex-1 truncate pl-5 font-serif text-2xl leading-none tracking-tight text-text-hi">
+                <span className="flex-1 truncate pl-3 font-serif text-2xl leading-none tracking-tight text-text-hi">
                     {APP_NAME}
                 </span>
             )}
@@ -20,7 +21,7 @@ export function AppHeader() {
                 onClick={toggleSidebar}
                 aria-label="Toggle sidebar"
                 className={`flex size-7 shrink-0 items-center justify-center rounded-full border border-hairline text-text-mid transition-colors hover:border-hairline-strong hover:text-text-hi ${
-                    collapsed ? '' : 'mr-3 ml-auto'
+                    collapsed ? '' : 'mr-1 ml-auto'
                 }`}
             >
                 {collapsed ? (

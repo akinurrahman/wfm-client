@@ -1,21 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 
-import { Search } from 'lucide-react';
-
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { PageTitleSlotContext } from '@/components/shared/page-title-slot';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import {
-    CommandPalette,
-    isMacPlatform,
-    useCommandPaletteStore,
-} from '@/systems/command-palette';
+import { CommandPalette } from '@/systems/command-palette';
 import { useSidebarStore } from '@/stores/sidebar';
 
 import { AppSidebar } from './app-sidebar';
-import { UserMenu } from './user-menu';
 
 type Crumb = { label: string; url?: string };
 
@@ -105,11 +98,10 @@ const LayoutWrapper = () => {
     // empty. Held in state rather than a ref so the portal target is there on
     // the render right after the header mounts.
     const [titleSlot, setTitleSlot] = useState<HTMLDivElement | null>(null);
-    // A phone bar is already carrying the sidebar trigger and two icons, so the
-    // title stays in the page there rather than fighting them for the row.
+    // A phone bar is already carrying the sidebar trigger, so the title stays in
+    // the page there rather than fighting it for the row.
     const isMobile = useIsMobile();
     const hoistTitle = !crumbs && !isMobile;
-    const openPalette = useCommandPaletteStore(store => store.openPalette);
 
     return (
         <SidebarProvider
@@ -135,30 +127,6 @@ const LayoutWrapper = () => {
                     {crumbs ? <Trail crumbs={crumbs} /> : null}
                     {hoistTitle ? <div ref={setTitleSlot} className="min-w-0 flex-1" /> : null}
 
-                    <div className="ml-auto flex shrink-0 items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={openPalette}
-                            className="hidden h-9 w-72 cursor-pointer items-center gap-2 rounded-full border border-hairline bg-surface-1/60 px-3.5 text-[13px] transition-colors hover:border-hairline-strong desk:flex"
-                        >
-                            <Search className="size-3.5 shrink-0 text-text-low" />
-                            <span className="min-w-0 flex-1 text-left text-text-low">Search</span>
-                            <kbd className="shrink-0 rounded-sm border border-hairline px-1.5 py-0.5 font-mono text-[10px] text-text-low">
-                                {isMacPlatform() ? '⌘K' : 'Ctrl K'}
-                            </kbd>
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={openPalette}
-                            aria-label="Search pages"
-                            className="flex size-8 items-center justify-center rounded-full border border-hairline text-text-mid transition-colors hover:border-hairline-strong hover:text-text-hi desk:hidden"
-                        >
-                            <Search className="size-3.5" />
-                        </button>
-
-                        <UserMenu />
-                    </div>
                 </header>
 
                 <CommandPalette />
