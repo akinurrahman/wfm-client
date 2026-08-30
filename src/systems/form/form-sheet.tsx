@@ -1,4 +1,4 @@
-import type { DefaultValues, FieldValues, UseFormReturn } from 'react-hook-form';
+﻿import type { DefaultValues, FieldValues, UseFormReturn } from 'react-hook-form';
 import type { z } from 'zod';
 
 import {
@@ -57,8 +57,10 @@ export function FormSheet<TValues extends FieldValues>({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className={cn('w-full gap-0 p-0 sm:max-w-md', className)}>
-        <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg leading-tight text-text-hi">{title}</SheetTitle>
+        <SheetHeader className="border-b border-hairline p-6">
+          <SheetTitle className="display-title text-[15px] leading-tight text-text-hi">
+            {title}
+          </SheetTitle>
           {description ? (
             <SheetDescription className="text-[13px] leading-relaxed text-text-mid">
               {description}
@@ -75,7 +77,7 @@ export function FormSheet<TValues extends FieldValues>({
         >
           {form => (
             <>
-              <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-5">
+              <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-6">
                 {typeof children === 'function' ? children(form) : children}
               </div>
 

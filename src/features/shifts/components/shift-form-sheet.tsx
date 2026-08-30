@@ -1,4 +1,4 @@
-import type { DefaultValues } from 'react-hook-form';
+﻿import type { DefaultValues } from 'react-hook-form';
 
 import {
   formatDuration,
@@ -117,7 +117,7 @@ export function ShiftFormSheet({ open, onOpenChange, shift }: Props) {
                   <Metric label="Span" value={formatDuration(span)} />
                   <Metric label="Net" value={formatDuration(Math.max(span - breakMinutes, 0))} />
                   {isNightShift(startMinutes, endMinutes) ? (
-                    <span className="font-mono text-[10px] tracking-[0.14em] text-awaiting uppercase">
+                    <span className="meta-label text-awaiting">
                       Crosses midnight
                     </span>
                   ) : null}
@@ -172,7 +172,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-3">
-        <h3 className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">{title}</h3>
+        <h3 className="display-title text-[13px] text-text-hi">{title}</h3>
         <span aria-hidden className="h-px flex-1 bg-hairline" />
       </div>
       {children}
@@ -183,7 +183,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline gap-1.5">
-      <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</dt>
+      <dt className="meta-label text-text-low">{label}</dt>
       <dd data-numeric className="text-[13px] font-medium text-text-hi">
         {value}
       </dd>

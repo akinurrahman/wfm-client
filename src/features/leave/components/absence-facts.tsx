@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib/format';
+﻿import { formatDate } from '@/lib/format';
 import { toCalendarDate } from '@/lib/time';
 
 import type { PlannedAbsence } from '../definitions/planned-absence.types';
@@ -24,7 +24,7 @@ export function AbsenceFacts({ absence }: { absence: PlannedAbsence }) {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline gap-1.5">
-      <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</dt>
+      <dt className="meta-label text-text-low">{label}</dt>
       <dd data-numeric className="text-[13px] font-medium text-text-hi">
         {value}
       </dd>

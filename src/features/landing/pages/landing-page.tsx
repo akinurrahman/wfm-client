@@ -1,7 +1,7 @@
-import { CalendarRange, RotateCcw } from 'lucide-react';
+﻿import { RotateCcw } from 'lucide-react';
 import { createSearchParams, useNavigate } from 'react-router';
 
-import { APP_NAME } from '@/constants';
+import { BrandMark } from '@/components/shared/brand-mark';
 
 import { useBackendHealth } from '../api/landing.queries';
 import { DemoAccountCard } from '../components/demo-account-card';
@@ -46,14 +46,7 @@ export default function LandingPage() {
       <div
         className={`${COLUMN_PADDING} pt-8 desk:col-start-1 desk:row-start-1 desk:self-start desk:pt-10`}
       >
-        <span className="inline-flex items-center gap-2.5">
-          <span className="m-brand-fill flex size-7 items-center justify-center rounded-md">
-            <CalendarRange className="size-4" />
-          </span>
-          <span className="font-serif text-2xl leading-none tracking-tight text-text-hi">
-            {APP_NAME}
-          </span>
-        </span>
+        <BrandMark className="h-9 w-auto object-left sm:h-10" />
       </div>
 
       <div
@@ -63,10 +56,7 @@ export default function LandingPage() {
         }}
       >
         <div className={PROSE}>
-          <p className="font-mono text-[10px] tracking-[0.24em] text-text-low uppercase">
-            Demo sandbox
-          </p>
-          <h1 className="mt-3 font-serif text-[1.75rem] leading-[1.1] text-text-hi sm:text-[2.125rem] desk:text-[2.5rem] desk:leading-[1.06] xl:text-[2.875rem] 2xl:text-[3.25rem]">
+          <h1 className="display-title text-[1.75rem] leading-[1.1] text-text-hi sm:text-[2.125rem] desk:text-[2.5rem] desk:leading-[1.06] xl:text-[2.875rem] 2xl:text-[3.25rem]">
             An HRMS portal I built to show the level of work I deliver.
           </h1>
           <p className="mt-4 text-[13.5px] leading-relaxed sm:text-[14px] 2xl:text-[15px]">
@@ -85,10 +75,10 @@ export default function LandingPage() {
           <WalkthroughVideo />
 
           <div className="flex items-baseline justify-between gap-4">
-            <h2 className="font-mono text-[10px] tracking-[0.2em] text-text-mid uppercase">
+            <h2 className="meta-label text-text-mid">
               Demo accounts
             </h2>
-            <span className="font-mono text-[10px] tracking-[0.16em] text-text-low uppercase">
+            <span className="meta-label text-text-low">
               Copy or sign in
             </span>
           </div>
@@ -110,7 +100,7 @@ export default function LandingPage() {
         className={`${COLUMN_PADDING} mt-9 desk:col-start-1 desk:row-start-3 desk:mt-0 desk:py-3`}
       >
         <div className={`${PROSE} border-t border-hairline pt-6 2xl:pt-8`}>
-          <h2 className="font-serif text-[1.375rem] leading-tight text-text-hi sm:text-[1.5rem] 2xl:text-[1.75rem]">
+          <h2 className="display-title text-[1.375rem] leading-tight text-text-hi sm:text-[1.5rem] 2xl:text-[1.75rem]">
             Break it. Please.
           </h2>
           <p className="mt-3 text-[13.5px] leading-relaxed sm:text-[14px] 2xl:text-[15px]">
@@ -120,7 +110,7 @@ export default function LandingPage() {
             real.
           </p>
 
-          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface-2 px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] text-text-mid uppercase">
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface-2 px-3 py-1.5 meta-label text-text-mid">
             <RotateCcw aria-hidden="true" className="size-3 shrink-0" />
             Wiped and re-seeded {RESET_SCHEDULE}
           </p>
@@ -128,7 +118,7 @@ export default function LandingPage() {
       </div>
 
       <p
-        className={`${COLUMN_PADDING} mt-8 pb-8 font-mono text-[9px] tracking-[0.2em] text-text-low uppercase desk:col-start-1 desk:row-start-4 desk:mt-0 desk:self-end desk:pb-10`}
+        className={`${COLUMN_PADDING} mt-8 pb-8 meta-label text-text-low desk:col-start-1 desk:row-start-4 desk:mt-0 desk:self-end desk:pb-10`}
       >
         Seeded data / nothing here is real
       </p>

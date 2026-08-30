@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+﻿import { cn } from '@/lib/utils';
 
 import type { RosterRow } from '../../definitions/attendance.types';
 
@@ -18,7 +18,7 @@ export function RosterDaySummary({ rows, total }: Props) {
 
   return (
     <div className="m-panel m-panel-shine mb-4 flex flex-wrap items-baseline gap-x-6 gap-y-3 px-4 py-3.5">
-      <span className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">
+      <span className="meta-label text-text-low">
         On this page
       </span>
 
@@ -45,7 +45,7 @@ function Metric({
 }) {
   return (
     <span className="flex items-baseline gap-1.5">
-      <span className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+      <span className="meta-label text-text-low">
         {label}
       </span>
       <span

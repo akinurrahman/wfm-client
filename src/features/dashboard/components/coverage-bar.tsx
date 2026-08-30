@@ -15,7 +15,7 @@ export function CoverageBar({ day, filled, target }: Props) {
 
       <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3">
         <div
-          className={cn('h-full rounded-full', short ? 'bg-awaiting' : 'bg-brand')}
+          className={cn('h-full rounded-full', short ? 'bg-awaiting' : 'bg-data')}
           style={{ width: `${filled}%` }}
         />
         <span

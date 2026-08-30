@@ -37,7 +37,7 @@ export function ShiftSpan({ start, end, label }: Props) {
         {segments.map(([from, to]) => (
           <span
             key={from}
-            className="absolute inset-y-0 rounded-full bg-brand"
+            className="absolute inset-y-0 rounded-full bg-data"
             style={{
               left: `${(from / DAY_MINUTES) * 100}%`,
               width: `${((to - from) / DAY_MINUTES) * 100}%`,

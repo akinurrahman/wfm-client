@@ -1,4 +1,4 @@
-import { CalendarClock, Clock3, Download, Plus, Users } from 'lucide-react';
+﻿import { CalendarClock, Clock3, Download, Plus, Users } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     <div className="pb-4">
       <PageHeader
         title="Overview"
-        description="Dummy data, here to preview the Cyanotype theme."
+        description="Dummy data, here to preview the interface."
         actions={
           <>
             <Button variant="outline" size="lg">
@@ -77,17 +77,19 @@ export default function DashboardPage() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {STATS.map(stat => (
           <StatCard key={stat.label} {...stat} />
         ))}
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+      <div className="mt-5 grid gap-5 xl:grid-cols-3">
         <section className="m-panel m-panel-shine xl:col-span-2">
-          <div className="flex items-center justify-between gap-3 px-5 py-4">
+          <div className="flex items-center justify-between gap-3 px-6 py-5">
             <div>
-              <h2 className="font-serif text-lg leading-tight text-text-hi">Today&apos;s roster</h2>
+              <h2 className="display-title text-[15px] leading-tight text-text-hi">
+                Today&apos;s roster
+              </h2>
               <p className="mt-0.5 text-[12px] text-text-mid">5 of 96 shifts shown</p>
             </div>
             <Button variant="ghost" size="sm">
@@ -134,8 +136,8 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="m-panel m-panel-shine p-5">
-          <h2 className="font-serif text-lg leading-tight text-text-hi">Coverage</h2>
+        <section className="m-panel m-panel-shine p-6">
+          <h2 className="display-title text-[15px] leading-tight text-text-hi">Coverage</h2>
           <p className="mt-0.5 text-[12px] text-text-mid">
             Filled slots per day, against a {COVERAGE_TARGET}% target
           </p>

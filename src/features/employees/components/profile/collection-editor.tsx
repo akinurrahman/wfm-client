@@ -1,4 +1,4 @@
-import { Loader2, Plus } from 'lucide-react';
+﻿import { Loader2, Plus } from 'lucide-react';
 
 import { EmptyState } from '@/components/shared/empty-state';
 import { Badge } from '@/components/ui/badge';
@@ -54,7 +54,7 @@ export function CollectionEditor<TValues>({
     <div className="m-panel m-panel-shine overflow-hidden">
       <div className="flex flex-col gap-3 border-b border-hairline p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h2 className="font-serif text-lg leading-tight text-text-hi">{title}</h2>
+          <h2 className="display-title text-lg leading-tight text-text-hi">{title}</h2>
           <p className="mt-1 text-[13px] text-text-mid">{description}</p>
         </div>
 

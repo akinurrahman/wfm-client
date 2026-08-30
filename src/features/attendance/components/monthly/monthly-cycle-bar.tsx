@@ -1,4 +1,4 @@
-import { AlertTriangle, FileText, Loader2, Lock, LockOpen, Plus } from 'lucide-react';
+﻿import { AlertTriangle, FileText, Loader2, Lock, LockOpen, Plus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ export function MonthlyCycleBar({
     <div className="m-panel m-panel-shine mb-4 flex flex-col gap-3 px-4 py-3.5 lg:flex-row lg:items-center">
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         <span className="flex items-baseline gap-2">
-          <span className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">
+          <span className="meta-label text-text-low">
             Cycle
           </span>
           <span data-numeric className="text-[13px] font-medium text-text-hi">

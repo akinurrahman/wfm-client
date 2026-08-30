@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+﻿import { parseISO } from 'date-fns';
 import { AlertTriangle, ChevronRight } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
@@ -88,7 +88,7 @@ export function MonthlyGrid({
                     {/* Dropped on a phone: it wraps to a second and third line and
                         the column is what the day cells are competing with. */}
                     {row.employee.designation ? (
-                      <span className="hidden sm:inline"> · {row.employee.designation}</span>
+                      <span className="hidden sm:inline"> Â· {row.employee.designation}</span>
                     ) : null}
                   </span>
                 </div>
@@ -145,7 +145,7 @@ export function MonthlyGrid({
 function Tally({ label, value }: { label: string; value: number }) {
   return (
     <span className="flex items-baseline gap-1">
-      <span className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+      <span className="meta-label text-text-low">
         {label}
       </span>
       <span data-numeric className="text-[13px] font-medium text-text-hi">

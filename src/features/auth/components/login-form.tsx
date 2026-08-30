@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+﻿import { useState, type ReactNode } from 'react';
 
 import { ArrowRight, Eye, EyeOff, Loader2, TriangleAlert } from 'lucide-react';
 import { z } from 'zod';
@@ -155,12 +155,12 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="font-mono text-[10px] tracking-[0.18em] text-text-mid uppercase"
+          className="meta-label text-text-mid"
         >
           {label}
         </label>
         {hint ? (
-          <span className="font-mono text-[9px] tracking-[0.14em] text-awaiting uppercase">
+          <span className="meta-label text-awaiting">
             {hint}
           </span>
         ) : null}

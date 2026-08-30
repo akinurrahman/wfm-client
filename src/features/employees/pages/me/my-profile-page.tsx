@@ -1,4 +1,4 @@
-import { UserX } from 'lucide-react';
+﻿import { UserX } from 'lucide-react';
 
 import { EmptyState } from '@/components/shared/empty-state';
 import { ErrorState } from '@/components/shared/error-state';
@@ -110,7 +110,7 @@ function IdentityCard({ employee }: { employee: EmployeeDetail }) {
         </span>
 
         <div className="min-w-0">
-          <h2 className="truncate font-serif text-lg leading-tight text-text-hi">
+          <h2 className="truncate display-title text-lg leading-tight text-text-hi">
             {employee.fullName}
           </h2>
           <p className="mt-0.5 truncate text-[13px] text-text-mid">
@@ -151,7 +151,7 @@ function IdentityCard({ employee }: { employee: EmployeeDetail }) {
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</p>
+      <p className="meta-label text-text-low">{label}</p>
       <div className="mt-1">{children}</div>
     </div>
   );

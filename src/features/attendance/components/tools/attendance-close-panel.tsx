@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 import { Loader2, Lock } from 'lucide-react';
 
@@ -81,7 +81,7 @@ export function AttendanceClosePanel() {
             ]}
           />
 
-          <p className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">
+          <p className="meta-label text-text-low">
             From the derive pass
           </p>
           <AttendanceResultMetrics

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 
 import { Link, useParams } from 'react-router';
 
@@ -105,7 +105,7 @@ export default function PeriodSummaryPage() {
 
       <div className="m-panel m-panel-shine mb-4 flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3.5">
         <span className="flex items-baseline gap-2">
-          <span className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">
+          <span className="meta-label text-text-low">
             Cycle
           </span>
           <span data-numeric className="text-[13px] font-medium text-text-hi">

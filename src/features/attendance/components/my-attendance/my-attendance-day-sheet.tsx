@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+﻿import { parseISO } from 'date-fns';
 import { AlertTriangle, PartyPopper } from 'lucide-react';
 
 import {
@@ -30,7 +30,7 @@ export function MyAttendanceDaySheet({ open, onOpenChange, day }: Props) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg leading-tight text-text-hi">
+          <SheetTitle className="display-title text-lg leading-tight text-text-hi">
             {day ? formatDate(parseISO(day.date), 'EEEE, dd MMM yyyy') : 'Day'}
           </SheetTitle>
           <SheetDescription className="text-[13px] leading-relaxed text-text-mid">

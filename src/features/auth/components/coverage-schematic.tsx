@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib';
+﻿import { formatDate } from '@/lib';
 
 /** Reads as a drafting sheet because that is what a roster is: a day divided
  *  into spans, drawn to scale. Illustrative spans, real clock on the marker. */
@@ -16,7 +16,7 @@ const LABEL_COLUMN = '5.25rem';
 
 // Full class strings, never interpolated, so Tailwind can see them.
 const TONE = {
-  covered: { bar: 'bg-brand/65 ring-brand-line', dot: 'bg-brand' },
+  covered: { bar: 'bg-data/70 ring-data/40', dot: 'bg-data' },
   short: { bar: 'bg-awaiting/55 ring-awaiting/45', dot: 'bg-awaiting' },
 } as const;
 
@@ -35,10 +35,10 @@ export function CoverageSchematic() {
       }}
     >
       <figcaption className="flex items-baseline justify-between gap-4">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-text-mid uppercase">
+        <span className="meta-label text-text-mid">
           Coverage / 24h
         </span>
-        <span className="tnum font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+        <span className="tnum meta-label text-text-low">
           {formatDate(now, 'EEE dd MMM')}
         </span>
       </figcaption>
@@ -125,13 +125,13 @@ export function CoverageSchematic() {
         {(['covered', 'short'] as const).map(tone => (
           <span
             key={tone}
-            className="flex items-center gap-1.5 font-mono text-[9px] tracking-[0.14em] text-text-low uppercase"
+            className="flex items-center gap-1.5 meta-label text-text-low"
           >
             <span className={`size-1.5 rounded-full ${TONE[tone].dot}`} />
             {tone === 'covered' ? 'Covered' : 'Short staffed'}
           </span>
         ))}
-        <span className="tnum ml-auto font-mono text-[9px] tracking-[0.14em] text-text-low uppercase">
+        <span className="tnum ml-auto meta-label text-text-low">
           Now {formatDate(now, 'HH:mm')}
         </span>
       </div>

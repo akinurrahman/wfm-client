@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+﻿import { cn } from '@/lib/utils';
 
 /** The counted month, read the same way wherever it is shown: a labelled group
  *  of figures, each one a term the payroll conversation already uses. */
@@ -6,7 +6,7 @@ export function SummarySection({ title, children }: { title: string; children: R
   return (
     <section>
       <div className="mb-3 flex items-center gap-3">
-        <h3 className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">{title}</h3>
+        <h3 className="meta-label text-text-low">{title}</h3>
         <span aria-hidden className="h-px flex-1 bg-hairline" />
       </div>
       <dl className="flex flex-wrap gap-x-6 gap-y-2.5">{children}</dl>
@@ -27,7 +27,7 @@ export function SummaryFigure({
 }) {
   return (
     <div className="flex items-baseline gap-1.5" title={hint}>
-      <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</dt>
+      <dt className="meta-label text-text-low">{label}</dt>
       <dd
         data-numeric
         className={cn(

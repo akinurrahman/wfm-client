@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+﻿import { parseISO } from 'date-fns';
 import { AlertTriangle, ArrowUpRight } from 'lucide-react';
 
 import { EmptyState } from '@/components/shared/empty-state';
@@ -35,7 +35,7 @@ export function MonthlyTotalsSheet({ open, onOpenChange, row, onSelectDay }: Pro
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full gap-0 p-0 sm:max-w-lg">
         <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg leading-tight text-text-hi">
+          <SheetTitle className="display-title text-lg leading-tight text-text-hi">
             {row ? row.employee.fullName : 'Totals'}
           </SheetTitle>
           <SheetDescription className="text-[13px] leading-relaxed text-text-mid">

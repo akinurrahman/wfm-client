@@ -112,14 +112,17 @@ const LayoutWrapper = () => {
             }
         >
             <AppSidebar />
-            <SidebarInset className="flex min-h-0 flex-col overflow-hidden">
+            {/* rounded-xl, not the shipped rounded-lg: the sheet is the outer
+             *  container of every 12px panel on the page, and an outer radius
+             *  below its contents' reads as a mistake. */}
+            <SidebarInset className="flex min-h-0 flex-col overflow-hidden md:rounded-xl">
                 <header
                     /* On a landing page the bar carries the page title
                      * itself, so it grows to fit instead of standing empty
                      * above it. */
                     className={cn(
-                        'flex shrink-0 items-center gap-3 px-6',
-                        hoistTitle ? 'pt-6 pb-5' : 'h-14'
+                        'flex shrink-0 items-center gap-3 px-4 sm:px-6 lg:px-8',
+                        hoistTitle ? 'pt-7 pb-6' : 'h-16'
                     )}
                 >
                     <SidebarTrigger className="-ml-2 md:hidden" />
@@ -132,7 +135,7 @@ const LayoutWrapper = () => {
                 <CommandPalette />
 
                 <PageTitleSlotContext.Provider value={hoistTitle ? titleSlot : null}>
-                    <div className="flex-1 overflow-auto px-6 pb-6">
+                    <div className="flex-1 overflow-auto px-4 pb-8 sm:px-6 lg:px-8">
                         <Outlet />
                     </div>
                 </PageTitleSlotContext.Provider>

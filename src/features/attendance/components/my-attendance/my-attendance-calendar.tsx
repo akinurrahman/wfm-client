@@ -1,4 +1,4 @@
-import { getDate, getDay, parseISO } from 'date-fns';
+﻿import { getDate, getDay, parseISO } from 'date-fns';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { todayCalendarDate, toCalendarDate, WEEKDAYS } from '@/lib/time';
@@ -42,7 +42,7 @@ export function MyAttendanceCalendar({ days, isLoading, selectedDate, onSelectDa
           <div
             key={weekday.value}
             className={cn(
-              'pb-1.5 text-center font-mono text-[10px] tracking-[0.12em] uppercase',
+              'pb-1.5 text-center meta-label',
               WEEKEND_COLUMNS.has(Number(weekday.value)) ? 'text-text-low/70' : 'text-text-low'
             )}
           >

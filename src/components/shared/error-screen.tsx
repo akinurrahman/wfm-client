@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
+﻿import { cn } from '@/lib/utils';
 
 type Props = {
-  /** Big serif figure — a status code, or a short token like "ERR". */
+  /** Big serif figure â€” a status code, or a short token like "ERR". */
   code: string;
   /** Mono rail above the code. Reads as a drafting annotation, not a heading. */
   eyebrow: string;
@@ -9,7 +9,7 @@ type Props = {
   description: string;
   /** Buttons/links. The caller owns the order so the primary recovery is first. */
   actions?: React.ReactNode;
-  /** Raw technical text (stack, correlation id). Collapsed — a user only opens
+  /** Raw technical text (stack, correlation id). Collapsed â€” a user only opens
    *  it to paste it into a ticket, so it must never crowd the recovery path. */
   detail?: string;
   className?: string;
@@ -37,17 +37,17 @@ export function ErrorScreen({
         role="alert"
         className="m-panel m-panel-shine w-full max-w-lg animate-[m-rise_0.4s_ease-out] p-7 shadow-lift sm:p-9"
       >
-        {/* corner ticks — the sheet's registration marks */}
+        {/* corner ticks â€” the sheet's registration marks */}
         <Ticks />
 
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[11px] tracking-[0.16em] text-text-low uppercase">
+          <span className="meta-label text-text-low">
             {eyebrow}
           </span>
           <span aria-hidden className="h-px flex-1 origin-left animate-[m-draw_0.5s_ease-out] bg-hairline" />
         </div>
 
-        <p className="mt-5 font-serif text-6xl leading-none tracking-tight text-brand tnum sm:text-7xl">
+        <p className="mt-5 display-title text-6xl leading-none tracking-tight text-brand tnum sm:text-7xl">
           {code}
         </p>
 
@@ -60,7 +60,7 @@ export function ErrorScreen({
 
         {detail ? (
           <details className="group/detail mt-6 border-t border-hairline pt-4">
-            <summary className="cursor-pointer list-none font-mono text-[11px] tracking-[0.14em] text-text-low uppercase transition-colors duration-200 hover:text-text-mid">
+            <summary className="cursor-pointer list-none meta-label text-text-low transition-colors duration-200 hover:text-text-mid">
               Technical detail
               <span aria-hidden className="ml-2 inline-block group-open/detail:hidden">
                 +

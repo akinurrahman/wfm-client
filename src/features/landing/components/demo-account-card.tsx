@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 
 import { ArrowRight, Check, Copy, ShieldCheck, UserRound } from 'lucide-react';
 import { toast } from 'sonner';
@@ -43,7 +43,7 @@ export function DemoAccountCard({
         >
           <Icon className="size-4" />
         </span>
-        <h3 className="font-serif text-lg leading-tight text-text-hi">
+        <h3 className="display-title text-lg leading-tight text-text-hi">
           {roleLabel}
         </h3>
       </header>
@@ -92,7 +92,7 @@ function CredentialRow({ label, value }: { label: string; value: string }) {
 
   return (
     <div className="rounded-md bg-surface-2 px-3 py-1.5">
-      <dt className="font-mono text-[9px] tracking-[0.18em] text-text-low uppercase">
+      <dt className="meta-label text-text-low">
         {label}
       </dt>
       <div className="flex items-center gap-2">

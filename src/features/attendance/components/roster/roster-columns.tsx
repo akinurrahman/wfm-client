@@ -135,7 +135,7 @@ export function rosterColumns({
             <LookupBadge lookup={rosterStatusLookup} value={row.original.status} />
 
             {row.original.source ? (
-              <span className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+              <span className="meta-label text-text-low">
                 {attendanceSourceLookup.resolve(row.original.source)?.label}
               </span>
             ) : null}
@@ -199,7 +199,7 @@ export function rosterColumns({
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {chips.map(chip => (
               <span key={chip.label} className="flex items-baseline gap-1">
-                <span className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+                <span className="meta-label text-text-low">
                   {chip.label}
                 </span>
                 <span data-numeric className={cn('text-[12px] font-medium', chip.tone)}>

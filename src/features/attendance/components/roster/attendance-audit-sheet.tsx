@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 import { ArrowRight, History } from 'lucide-react';
 
@@ -104,7 +104,7 @@ export function AttendanceAuditSheet({ open, onOpenChange, row }: Props) {
     >
       <SheetContent className="w-full gap-0 p-0 sm:max-w-lg">
         <SheetHeader className="border-b border-hairline p-5">
-          <SheetTitle className="font-serif text-lg leading-tight text-text-hi">
+          <SheetTitle className="display-title text-lg leading-tight text-text-hi">
             {row ? `History for ${row.employee.fullName}` : 'History'}
           </SheetTitle>
           <SheetDescription className="text-[13px] leading-relaxed text-text-mid">
@@ -173,7 +173,7 @@ function AuditEntry({ entry }: { entry: AttendanceAuditEntry }) {
         <dl className="mt-2.5 space-y-1">
           {fields.map(field => (
             <div key={field.key} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-              <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+              <dt className="meta-label text-text-low">
                 {field.label}
               </dt>
               <dd className="flex items-center gap-1.5 text-[12px] text-text-mid">

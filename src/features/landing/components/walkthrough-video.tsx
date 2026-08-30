@@ -1,4 +1,4 @@
-import { WALKTHROUGH_VIDEO_ID } from '../definitions/landing.constants';
+﻿import { WALKTHROUGH_VIDEO_ID } from '../definitions/landing.constants';
 
 /** nocookie host, and no autoplay: a video that starts talking on load is the
  *  fastest way off the page. */
@@ -18,7 +18,7 @@ export function WalkthroughVideo() {
         />
       </div>
       <figcaption className="flex flex-wrap items-baseline justify-between gap-2 border-t border-hairline px-5 py-3.5">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-text-mid uppercase">
+        <span className="meta-label text-text-mid">
           Walkthrough
         </span>
         <span className="text-[12px] text-text-low">

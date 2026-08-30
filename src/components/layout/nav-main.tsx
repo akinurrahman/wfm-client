@@ -54,7 +54,10 @@ export function NavMain() {
   );
 
   const ITEM_CLASS =
-    "h-9 gap-2.5 rounded-md px-3 text-[13px] font-normal text-text-mid transition-colors hover:bg-sidebar-hover hover:text-text-hi data-active:bg-sidebar-active data-active:font-normal data-active:text-text-hi [&_svg]:size-4 [&_svg]:text-text-low data-active:[&_svg]:text-brand";
+    // The active fill, its text tone and its icon tone live in index.css under
+    // [data-slot='sidebar-menu-button'][data-active]: it paints a gradient, and
+    // a Tailwind background-color utility cannot.
+    "h-9 gap-2.5 rounded-md px-3 text-[13px] font-normal text-text-mid transition-colors hover:bg-sidebar-hover hover:text-text-hi data-active:font-medium [&_svg]:size-4 [&_svg]:text-text-low";
 
   const renderItem = (item: SidebarItem) => {
     const hasSubItems = !!item.items?.length;
@@ -113,7 +116,7 @@ export function NavMain() {
                 {item.items?.map((sub) => (
                   <SidebarMenuSubItem key={sub.title}>
                     <SidebarMenuSubButton
-                      className="h-8 text-[13px] text-text-low hover:bg-sidebar-hover hover:text-text-hi data-active:bg-transparent data-active:text-brand"
+                      className="h-8 text-[13px] text-text-low hover:bg-sidebar-hover hover:text-text-hi data-active:bg-transparent data-active:font-medium"
                       render={<Link to={resolvedUrl(sub.url)} />}
                       isActive={isExact(sub.url)}
                     >
@@ -157,11 +160,11 @@ export function NavMain() {
           className="gap-2 p-0"
         >
           {group.group && (
-            <SidebarGroupLabel className="h-auto px-3 text-[10px] font-normal tracking-[0.16em] text-text-low uppercase">
+            <SidebarGroupLabel className="h-auto px-3 text-[11px] font-medium tracking-[0.07em] text-text-low uppercase">
               {group.group}
             </SidebarGroupLabel>
           )}
-          <SidebarMenu className="gap-0.5">
+          <SidebarMenu className="gap-1">
             {group.items.map((item) => renderItem(item))}
           </SidebarMenu>
         </SidebarGroup>

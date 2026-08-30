@@ -42,7 +42,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-hairline transition-colors last:border-0 data-[interactive]:cursor-pointer hover:data-[interactive]:bg-surface-2/70",
+        "border-b border-hairline transition-colors last:border-0 data-[interactive]:cursor-pointer hover:data-[interactive]:bg-row-hover",
         // The global focus ring uses a positive outline-offset, which on a row
         // draws over the neighbouring rows and gets clipped by the panel's
         // overflow-hidden. Inset it so the ring stays inside the row.
@@ -59,9 +59,9 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        // text-mid, not text-low: at 11px uppercase the low tone only reached
-        // ~2.4:1 on the panel and the labels read as disabled.
-        "h-10 px-3 text-left align-middle text-[11px] font-semibold tracking-[0.09em] text-text-mid uppercase whitespace-nowrap first:pl-4 last:pr-4",
+        // text-mid, not text-low: the low tone only reached ~2.4:1 on the panel
+        // and the labels read as disabled.
+        "h-11 px-4 text-left align-middle text-[12px] font-medium text-text-mid whitespace-nowrap first:pl-5 last:pr-5",
         className
       )}
       {...props}
@@ -74,9 +74,9 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        // h-13 is a floor, not a fixed height: it keeps single-line rows from
+        // h-12 is a floor, not a fixed height: it keeps single-line rows from
         // collapsing next to the two-line ones, so the row rhythm stays even.
-        "h-13 px-3 py-2.5 align-middle text-[13px] text-text-mid first:pl-4 last:pr-4",
+        "h-12 px-4 py-2.5 align-middle text-[13px] text-text-mid first:pl-5 last:pr-5",
         className
       )}
       {...props}

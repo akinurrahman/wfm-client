@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+﻿import { cn } from '@/lib/utils';
 
 export type ResultMetric = {
   label: string;
@@ -17,7 +17,7 @@ export function AttendanceResultMetrics({ items }: Props) {
     <dl className="flex flex-wrap items-baseline gap-x-6 gap-y-3 rounded-lg border border-hairline bg-surface-2 px-3.5 py-3">
       {items.map(item => (
         <div key={item.label} className="flex items-baseline gap-1.5">
-          <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">
+          <dt className="meta-label text-text-low">
             {item.label}
           </dt>
           <dd

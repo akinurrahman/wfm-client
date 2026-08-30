@@ -1,4 +1,4 @@
-import type { DefaultValues } from 'react-hook-form';
+﻿import type { DefaultValues } from 'react-hook-form';
 
 import { AlertTriangle } from 'lucide-react';
 
@@ -220,7 +220,7 @@ function BulkSummary({ count }: { count: number }) {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline gap-1.5">
-      <dt className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</dt>
+      <dt className="meta-label text-text-low">{label}</dt>
       <dd data-numeric className="text-[13px] font-medium text-text-hi">
         {value}
       </dd>

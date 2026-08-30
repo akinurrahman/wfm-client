@@ -20,15 +20,19 @@ export function PageHeader({ title, description, actions, className }: Props) {
   const content = (
     <div
       className={cn(
-        'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
+        'flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between',
         // Hoisted into the bar, the bar owns the spacing below; inline, this does.
-        slot ? 'min-w-0 flex-1' : 'pb-5',
+        slot ? 'min-w-0 flex-1' : 'pb-6',
         className
       )}
     >
       <div className="min-w-0">
-        <h1 className="font-serif text-2xl leading-tight text-text-hi">{title}</h1>
-        {description ? <p className="mt-1 text-[13px] text-text-mid">{description}</p> : null}
+        <h1 className="display-title text-[1.5rem] leading-[1.15] text-text-hi">{title}</h1>
+        {description ? (
+          <p className="mt-1.5 max-w-[70ch] text-[13px] leading-relaxed text-text-mid">
+            {description}
+          </p>
+        ) : null}
       </div>
 
       {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}

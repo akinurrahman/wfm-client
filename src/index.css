@@ -1,72 +1,78 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/instrument-sans";
-@import "@fontsource/instrument-serif";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/schibsted-grotesk";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 @custom-variant dark (&:is([data-theme="dark"] *));
 
-/* ---------- 1. Raw Cyanotype tokens ---------- */
-/* Blueprint drafting. The ground carries the chroma instead of the accent, the
-   accent is chalk, and saturated colour is reserved for status alone - so any
-   colour on screen means something. */
 
 :root {
   /* surfaces */
-  --bg: oklch(14.8% 0.038 254.0);
-  --surface-1: oklch(18.4% 0.042 253.0);
-  --surface-2: oklch(21.6% 0.046 252.0);
-  --surface-3: oklch(25.4% 0.050 251.0);
+  --bg: oklch(15.8% 0.013 258.0);
+  --surface-1: oklch(19.2% 0.014 258.0);
+  --surface-2: oklch(22.6% 0.015 258.0);
+  --surface-3: oklch(27.0% 0.016 258.0);
 
-  /* lines */
-  --hairline: oklch(92.0% 0.030 220.0 / 0.11);
-  --hairline-strong: oklch(92.0% 0.030 220.0 / 0.19);
+  /* lines. Tinted from the ground rather than pure white alpha, so a hairline
+     never reads colder than the surface it divides. */
+  --hairline: oklch(78.0% 0.020 258.0 / 0.13);
+  --hairline-strong: oklch(80.0% 0.024 258.0 / 0.24);
 
-  /* table header band — one surface step *above* the panel top, so the row
-     reads as raised chrome. Going below --bg instead just punched a hole. */
-  --table-head: var(--surface-3);
+  /* table header band, one surface step above the panel so the row reads as
+     chrome rather than as the first data row */
+  --table-head: var(--surface-2);
 
   /* text */
-  --text-hi: oklch(96.0% 0.012 220.0);
-  --text-mid: oklch(74.0% 0.024 226.0);
-  --text-low: oklch(55.5% 0.032 232.0);
+  --text-hi: oklch(96.5% 0.005 258.0);
+  --text-mid: oklch(74.0% 0.012 258.0);
+  --text-low: oklch(57.5% 0.015 258.0);
 
-  /* accent: chalk on blueprint. High lightness, deliberately low chroma - the
-     ground is already blue, so an equally blue accent would sink into it. */
-  --brand: oklch(91.0% 0.045 210.0);
-  --brand-contrast: oklch(17.0% 0.045 253.0);      /* text on brand */
-  --brand-soft: oklch(91.0% 0.045 210.0 / 0.13);
-  --brand-line: oklch(91.0% 0.045 210.0 / 0.32);
-  --brand-grad-from: oklch(95.5% 0.028 205.0);
-  --brand-grad-to: oklch(87.0% 0.055 213.0);
+  /* accent. Two values on purpose: --brand is the on-surface tone for an active
+     icon, a link or an avatar, --brand-fill is the solid a button is painted
+     with. Both carry near-black label text: white on a 64% orange is 3.6:1 and
+     fails, ink on it is 8:1 and is also the sharper of the two. */
+  --brand: oklch(76.0% 0.155 52.0);
+  --brand-fill: oklch(67.0% 0.172 42.0);
+  --brand-contrast: oklch(17.0% 0.030 42.0);
+  --brand-soft: oklch(76.0% 0.155 52.0 / 0.14);
+  --brand-line: oklch(76.0% 0.155 52.0 / 0.34);
+  /* The gradient runs down and slightly toward red, so the fill has a lit top
+     edge instead of reading as one flat swatch of orange. */
+  --brand-grad-from: oklch(72.0% 0.162 50.0);
+  --brand-grad-to: oklch(63.5% 0.178 38.0);
 
-  /* status. Carries more chroma than the accent on purpose: colour is the one
-     thing here that means something, so it has to read as a different class of
-     thing from the chalk UI. */
-  --green: oklch(78.0% 0.145 168.0);
-  --green-soft: oklch(78.0% 0.145 168.0 / 0.14);
-  --amber: oklch(82.0% 0.135 78.0);
-  --amber-soft: oklch(82.0% 0.135 78.0 / 0.14);
-  --red: oklch(67.0% 0.165 25.0);
-  --red-soft: oklch(67.0% 0.165 25.0 / 0.14);
+  /* charts and coverage marks. Complementary to the accent on purpose: a bar
+     chart must not read as a row of primary buttons. */
+  --data: oklch(70.0% 0.125 242.0);
+  --data-soft: oklch(70.0% 0.125 242.0 / 0.16);
 
-  /* depth */
-  --lift: 0 16px 48px oklch(8.0% 0.030 253.0 / 0.62);
-  --glow: 0 0 0 1px oklch(91.0% 0.045 210.0 / 0.22), 0 8px 40px oklch(91.0% 0.045 210.0 / 0.09);
-  --card-shine: oklch(96.0% 0.020 215.0 / 0.20);   /* top highlight line on cards */
-  --scrim: oklch(11.0% 0.030 253.0 / 0.62);         /* drawer/dialog overlay, pairs with blur(3px) */
+  /* status. Amber is pulled to gold (hue 95) to open the gap to the accent. */
+  --green: oklch(76.0% 0.150 155.0);
+  --green-soft: oklch(76.0% 0.150 155.0 / 0.15);
+  --amber: oklch(84.0% 0.140 88.0);
+  --amber-soft: oklch(84.0% 0.140 88.0 / 0.15);
+  --red: oklch(66.0% 0.190 20.0);
+  --red-soft: oklch(66.0% 0.190 20.0 / 0.15);
 
-  /* ambient body wash: one cold overhead pool, the drafting lamp */
-  --wash: radial-gradient(1100px 520px at 50% -20%, oklch(91% 0.045 210 / 0.07), transparent 62%);
+  /* depth. A product surface sits on the page, it does not float above it. */
+  --lift: 0 1px 2px oklch(0% 0 0 / 0.44), 0 14px 34px oklch(8% 0.010 258 / 0.40);
+  --glow: 0 0 0 1px var(--brand-line), 0 8px 26px oklch(75% 0.148 46 / 0.14);
+  --card-shine: oklch(88% 0.030 258 / 0.09);
+  --scrim: oklch(9.5% 0.012 258.0 / 0.68);
 
-  /* the drafting grid. Panels are opaque, so it only shows in the gutters and
-     around the page edge, which is the whole point - the sheet under the work. */
-  --grid-line: oklch(91% 0.045 210 / 0.032);
-  --grid-size: 44px;
+  /* An interactive row warms rather than greys on hover, so "this responds"
+     and "this is selected" are the same signal at two strengths. */
+  --row-hover: oklch(75% 0.148 46 / 0.055);
 
-  /* geometry */
-  --radius: 0.75rem;                  /* 12px — shadcn derives sm/md/lg from this */
-  --radius-panel: 1.125rem;           /* 18px — panels, drawers */
+  /* one wide, very low ambient pool behind full-bleed marketing surfaces */
+  --wash: radial-gradient(1200px 620px at 50% -25%, oklch(75% 0.148 46 / 0.055), transparent 62%);
+
+  /* geometry. A 4 / 6 / 8 / 12 ladder: crisp controls, panels soft enough to
+     read as sheets. Deliberately off the 0.625rem default every shadcn install
+     ships with. */
+  --radius: 0.5rem;
+  --radius-panel: 0.75rem;
 
   /* ---------- 2. shadcn variable mapping ---------- */
   --background: var(--bg);
@@ -78,7 +84,7 @@
   --popover: var(--surface-2);
   --popover-foreground: var(--text-hi);
 
-  --primary: var(--brand);
+  --primary: var(--brand-fill);
   --primary-foreground: var(--brand-contrast);
 
   --secondary: var(--surface-3);
@@ -87,35 +93,43 @@
   --muted: var(--surface-2);
   --muted-foreground: var(--text-mid);
 
-  --accent: var(--surface-3);         /* hover tint for menus/lists — NOT the brand */
+  --accent: var(--surface-3);         /* hover tint for menus/lists, NOT the brand */
   --accent-foreground: var(--text-hi);
 
   --destructive: var(--red);
-  --destructive-foreground: oklch(17.0% 0.045 253.0);
+  --destructive-foreground: oklch(99.0% 0 0);
 
   --border: var(--hairline);
   --input: var(--hairline-strong);
   --ring: var(--brand-line);
 
-  --chart-1: var(--brand);
+  --chart-1: var(--data);
   --chart-2: var(--green);
   --chart-3: var(--text-mid);
   --chart-4: var(--amber);
   --chart-5: var(--red);
 
-  /* With variant="inset" the sidebar colour stops being a rail and becomes the
-     shell: it paints the whole window, and the content sheet (--bg) is laid on
-     top of it with a margin all round. So it has to sit clearly *below* --bg -
-     at a near match the sheet edge reads as a seam rather than as depth. */
-  --sidebar: oklch(10.4% 0.028 254.0);
+  /* With variant="inset" the sidebar colour paints the whole window and the
+     content sheet (--bg) is laid on top with a margin all round, so it has to
+     sit clearly below --bg or the sheet edge reads as a seam. */
+  /* The rail is the deepest surface in the theme, and it is lit from the top:
+     --sidebar is the flat value the inset shell paints, --sidebar-top is where
+     the rail's own gradient starts so the wordmark sits in light. */
+  --sidebar: oklch(13.2% 0.014 262.0);
+  --sidebar-top: oklch(16.4% 0.016 262.0);
   --sidebar-foreground: var(--text-mid);
+  /* Grain on the rail. Dark screens the noise so the speckle lights the
+     surface; overlay against a near-black base is a no-op. */
+  --grain-opacity: 0.11;
+  --grain-blend: screen;
   --sidebar-primary: var(--brand);
   --sidebar-primary-foreground: var(--brand-contrast);
   /* Nav rows sit straight on the shell with no panel under them, so their
-     fills are translucent chalk rather than a surface step - an opaque
-     --surface-3 pill on this ground reads as a floating box. */
-  --sidebar-hover: oklch(91.0% 0.045 210.0 / 0.055);
-  --sidebar-active: oklch(91.0% 0.045 210.0 / 0.10);
+     fills are translucent, not a surface step. The active fill is tinted from
+     the accent rather than from white, which is what makes the selected row
+     belong to the same system as the button it leads to. */
+  --sidebar-hover: oklch(88% 0.030 258 / 0.06);
+  --sidebar-active: oklch(75% 0.148 46 / 0.13);
   --sidebar-accent: var(--sidebar-hover);
   --sidebar-accent-foreground: var(--text-hi);
   --sidebar-border: var(--hairline);
@@ -123,78 +137,88 @@
 }
 
 /* ---------- Light theme ---------- */
-/* The print inverts: on paper the blueprint blue becomes the ink, and the
-   ground goes to cool drafting stock rather than warm cream. */
+/* Not the dark theme with the numbers flipped. On paper the separation between
+   levels has to come from line and shadow rather than from a lightness step,
+   because the usable range between a white panel and a white page is only a
+   couple of percent. So the desk goes materially darker than the sheet, every
+   panel keeps a real hairline, and the shadow is doing visible work. */
 
 [data-theme="light"] {
-  /* --bg is the inset sheet now rather than the table it lies on, so it moves
-     up towards paper; --sidebar carries the drafting-table role instead.
-     Panels still lift off it - --surface-1 stays a step brighter and every
-     panel carries a hairline - and the table showing round the sheet
-     re-supplies the frame the old darker ground used to give. */
-  --bg: oklch(96.3% 0.010 232.0);
-  --surface-1: oklch(99.4% 0.004 230.0);
-  --surface-2: oklch(98.0% 0.008 231.0);
-  --surface-3: oklch(94.8% 0.014 233.0);
+  /* Panels are not paper-white. They keep the same cool cast as the dark
+     theme's surfaces, one notch off pure white, which is what stops the light
+     mode reading as an unthemed default. */
+  --bg: oklch(96.8% 0.004 258.0);
+  --surface-1: oklch(99.6% 0.002 258.0);
+  --surface-2: oklch(98.2% 0.004 258.0);
+  --surface-3: oklch(94.6% 0.007 258.0);
 
-  --hairline: oklch(30.0% 0.055 253.0 / 0.14);
-  --hairline-strong: oklch(30.0% 0.055 253.0 / 0.24);
+  /* heavier than the dark theme's lines by design: a 9% line on white is a
+     suggestion, and the light theme has no lightness step to fall back on */
+  --hairline: oklch(30.0% 0.020 258.0 / 0.14);
+  --hairline-strong: oklch(30.0% 0.020 258.0 / 0.26);
 
-  /* same surface step in light - lands clear of both the white panel and the
-     page --bg, which a lighter tint could not do in that narrow range */
-  --table-head: var(--surface-3);
+  --table-head: oklch(96.6% 0.005 258.0);
 
-  --text-hi: oklch(24.0% 0.045 254.0);
-  --text-mid: oklch(47.0% 0.040 250.0);
-  --text-low: oklch(65.0% 0.030 246.0);
+  --text-hi: oklch(20.5% 0.018 258.0);
+  --text-mid: oklch(45.5% 0.016 258.0);
+  --text-low: oklch(58.5% 0.015 258.0);
 
-  --brand: oklch(44.0% 0.115 250.0);
-  --brand-contrast: oklch(98.5% 0.006 230.0);
-  --brand-soft: oklch(44.0% 0.115 250.0 / 0.1);
-  --brand-line: oklch(44.0% 0.115 250.0 / 0.38);
-  --brand-grad-from: oklch(52.0% 0.115 252.0);
-  --brand-grad-to: oklch(43.0% 0.118 249.0);
+  /* the accent darkens on paper so it keeps its weight, and still takes ink
+     rather than white as its label colour */
+  --brand: oklch(53.0% 0.165 40.0);
+  --brand-fill: oklch(64.5% 0.180 42.0);
+  --brand-contrast: oklch(18.5% 0.030 40.0);
+  --brand-soft: oklch(59.0% 0.170 42.0 / 0.13);
+  --brand-line: oklch(55.0% 0.170 42.0 / 0.36);
+  --brand-grad-from: oklch(69.5% 0.168 50.0);
+  --brand-grad-to: oklch(61.0% 0.184 38.0);
 
-  --green: oklch(50.0% 0.115 162.0);
-  --green-soft: oklch(50.0% 0.115 162.0 / 0.1);
-  --amber: oklch(56.0% 0.115 72.0);
-  --amber-soft: oklch(56.0% 0.115 72.0 / 0.1);
-  --red: oklch(55.0% 0.160 27.0);
-  --red-soft: oklch(55.0% 0.160 27.0 / 0.09);
+  --data: oklch(52.0% 0.150 245.0);
+  --data-soft: oklch(52.0% 0.150 245.0 / 0.13);
 
-  --lift: 0 1px 2px oklch(30.0% 0.060 253.0 / 0.06), 0 16px 40px oklch(30.0% 0.060 253.0 / 0.1);
-  --glow: 0 0 0 1px oklch(44.0% 0.115 250.0 / 0.25), 0 8px 40px oklch(44.0% 0.115 250.0 / 0.1);
-  --card-shine: oklch(44.0% 0.115 250.0 / 0.22);  /* ink hairline in light */
-  --scrim: oklch(26.0% 0.050 253.0 / 0.32);
+  --green: oklch(46.0% 0.115 155.0);
+  --green-soft: oklch(46.0% 0.115 155.0 / 0.12);
+  --amber: oklch(60.0% 0.135 82.0);
+  --amber-soft: oklch(60.0% 0.135 82.0 / 0.16);
+  --red: oklch(51.0% 0.185 22.0);
+  --red-soft: oklch(51.0% 0.185 22.0 / 0.11);
 
-  /* No wash on paper - a light radial on a light ground only ever reads as a
-     smudge. The ground carries itself here. */
-  --wash: none;
+  /* two layers: a tight contact shadow that seats the panel on the page, and a
+     wide soft one that gives it height. One alone reads as either a sticker or
+     a smudge. Both tinted from the ground, never neutral black. */
+  --lift: 0 1px 2px oklch(30% 0.020 258 / 0.09), 0 12px 32px oklch(30% 0.020 258 / 0.11);
+  --glow: 0 0 0 1px var(--brand-line), 0 8px 24px oklch(60% 0.160 44 / 0.20);
+  --card-shine: transparent;   /* a highlight line on white paper is only noise */
+  --scrim: oklch(26.0% 0.020 258.0 / 0.26);
 
-  /* Chalk lines on a dark ground disappear into texture; the same lines
-     inverted on paper read as graph paper, so light gets a third of the
-     weight and most of the chroma taken out. */
-  --grid-line: oklch(38.0% 0.045 250.0 / 0.03);
+  --row-hover: oklch(60% 0.165 44 / 0.08);
 
-  /* the drafting table: a clear step under the sheet, not a tint of it */
-  --sidebar: oklch(89.4% 0.022 236.0);
+  --wash: radial-gradient(1200px 620px at 50% -25%, oklch(66% 0.165 44 / 0.10), transparent 62%);
 
-  /* ink is the wrong direction on paper - a nav row highlights by going
-     lighter, i.e. towards the sheet it opens */
-  --sidebar-hover: oklch(100% 0 0 / 0.55);
-  --sidebar-active: oklch(100% 0 0 / 0.92);
+  /* the desk the sheet lies on. Deliberately a clear step under it: at a near
+     match the inset sheet edge reads as a seam instead of as depth. */
+  --sidebar: oklch(91.8% 0.008 258.0);
+  --sidebar-top: oklch(94.6% 0.006 258.0);
+  --grain-opacity: 0.16;
+  --grain-blend: multiply;
 
-  --destructive-foreground: oklch(98.5% 0.006 230.0);
+  /* a nav row highlights by going lighter here, towards the sheet it opens,
+     and the selected one picks up the accent the same way dark does */
+  --sidebar-hover: oklch(100% 0 0 / 0.60);
+  --sidebar-active: oklch(66% 0.165 44 / 0.18);
+
+  --destructive-foreground: oklch(99.5% 0 0);
   /* everything else re-resolves through the var() chain automatically */
 }
 
 /* ---------- 3. Expose to Tailwind utilities (v4 @theme) ---------- */
-/* Enables: bg-surface-2, text-mid, border-hairline, shadow-lift, font-serif, etc. */
 
 @theme inline {
-  --font-sans: 'Instrument Sans Variable', sans-serif;
-  --font-serif: 'Instrument Serif', serif;
-  --font-mono: 'JetBrains Mono Variable', monospace;
+  --font-sans: 'Schibsted Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  /* Nothing in this system is set in a serif. The alias only exists so a stray
+     `font-serif` cannot fall through to the browser's Times. */
+  --font-serif: var(--font-sans);
 
   /* shadcn-standard names */
   --color-background: var(--background);
@@ -232,7 +256,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Cyanotype-native names (use these in custom components) */
+  /* theme-native names (use these in custom components) */
   --color-surface-1: var(--surface-1);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
@@ -243,9 +267,13 @@
   --color-text-mid: var(--text-mid);
   --color-text-low: var(--text-low);
   --color-brand: var(--brand);
+  --color-brand-fill: var(--brand-fill);
   --color-brand-soft: var(--brand-soft);
   --color-brand-line: var(--brand-line);
   --color-brand-contrast: var(--brand-contrast);
+  --color-data: var(--data);
+  --color-data-soft: var(--data-soft);
+  --color-row-hover: var(--row-hover);
   --color-settled: var(--green);
   --color-settled-soft: var(--green-soft);
   --color-awaiting: var(--amber);
@@ -253,17 +281,17 @@
   --color-overdue: var(--red);
   --color-overdue-soft: var(--red-soft);
 
-  /* breakpoints — sidebar goes off-canvas below 960px (DESIGN.md) */
+  /* breakpoints: sidebar goes off-canvas below 960px */
   --breakpoint-desk: 60rem;
 
-  /* radius scale */
-  --radius-sm: 0.5rem;                /* 8px  — buttons, small controls */
-  --radius-md: 0.75rem;               /* 12px — inputs, cards */
-  --radius-lg: var(--radius-panel);   /* 18px — panels, drawers */
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* radius scale: 4 / 6 / 8 / 12 */
+  --radius-sm: 0.25rem;               /* 4px  - chips, kbd, tight controls */
+  --radius-md: 0.375rem;              /* 6px  - inputs, small buttons */
+  --radius-lg: var(--radius);         /* 8px  - buttons, menus */
+  --radius-xl: var(--radius-panel);   /* 12px - panels, drawers, cards */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.25rem;
+  --radius-4xl: 1.5rem;
 
   /* shadows */
   --shadow-lift: var(--lift);
@@ -284,17 +312,74 @@
   body {
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-optical-sizing: auto;
+    letter-spacing: -0.006em;
     background-attachment: fixed;
   }
 
+  /* The surfaces the browser draws for us still belong to the theme: leaving
+     them on their defaults is the clearest tell that a UI was assembled rather
+     than built. */
   ::selection {
-    background: var(--brand);
-    color: var(--brand-contrast);
+    background: var(--brand-soft);
+    color: var(--text-hi);
   }
 
   :focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 2px;
+  }
+
+  input,
+  textarea,
+  [contenteditable] {
+    caret-color: var(--brand);
+  }
+
+  ::placeholder {
+    color: var(--text-low);
+  }
+
+  ::marker {
+    color: var(--text-low);
+  }
+
+  a:not([class]) {
+    color: var(--brand);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* The 3px border is what makes the thumb read as a slim rail inside the
+     gutter instead of filling it. */
+  ::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-color: var(--hairline-strong);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-low);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -317,7 +402,28 @@
   }
 }
 
-/* ---------- 5. Entrance keyframes ---------- */
+/* ---------- 5. Type utilities ---------- */
+
+/* Headings are the same family as the body, separated by weight and negative
+   tracking rather than by a second typeface. */
+@utility display-title {
+  font-family: var(--font-sans);
+  font-weight: 640;
+  letter-spacing: -0.026em;
+  font-variant-numeric: lining-nums;
+}
+
+/* Small structural labels: definition-list terms, legends, figure captions.
+   Sentence case at a readable size, not tracked-out mono caps. Sets no colour,
+   so each site keeps its own text-* tone. */
+@utility meta-label {
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* ---------- 6. Entrance keyframes ---------- */
 /* Declared outside @layer so the animation shorthand in a component can reach
    them. The reduced-motion block above collapses both to a single frame. */
 
@@ -343,52 +449,162 @@
   }
 }
 
-/* ---------- 6. Reusable composition classes ---------- */
+/* ---------- 7. Reusable composition classes ---------- */
 
 @layer components {
-  /* Drafting sheet: lamp wash + grid. Paints image layers only, so it
-     composes over whatever background-color the element already carries.
-     Used on the login split, not on the app work area. */
+  /* Full-bleed marketing ground: one soft accent pool, no pattern. Paints an
+     image layer only, so it composes over the element's own background-color. */
   .m-sheet {
-    background-image:
-      var(--wash),
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: auto, 100% var(--grid-size), var(--grid-size) 100%;
-    background-repeat: no-repeat, repeat, repeat;
+    background-image: var(--wash);
+    background-repeat: no-repeat;
   }
 
-  /* the standard Cyanotype panel/card surface */
+  /* the standard panel/card surface. Flat, not a gradient: on a neutral ground
+     a vertical fade reads as a rendering artefact rather than as material. */
   .m-panel {
     position: relative;
-    background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
+    background: var(--surface-1);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-panel);
   }
 
-  /* faint top highlight line on cards (dark: chalk shine, light: ink hairline) */
+  /* faint top highlight, dark theme only (--card-shine is transparent in light) */
   .m-panel-shine::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 24px;
-    right: 24px;
+    left: 20px;
+    right: 20px;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--card-shine), transparent);
   }
 
-  /* primary brand button fill */
+  /* primary action fill */
   .m-brand-fill {
     background: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
     color: var(--brand-contrast);
-    box-shadow: 0 1px 0 oklch(100% 0 89.9 / 0.28) inset, 0 6px 20px var(--brand-soft);
+    border-color: transparent;
+    box-shadow:
+      0 1px 0 oklch(100% 0 0 / 0.18) inset,
+      0 1px 2px oklch(20% 0.030 42 / 0.28);
+  }
+
+  .m-brand-fill:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--brand-grad-to), var(--brand-grad-to));
   }
 }
 
-/* ---------- 7. Form field adaptation ---------- */
+/* ---------- 8. The desk ---------- */
+/* Unlayered so it beats the Tailwind utilities the shadcn sidebar ships with.
+
+   With variant="inset" the rail is not an object sitting next to the content:
+   the wrapper paints --sidebar across the whole window and the content sheet
+   is laid on top of it with a margin all round. So the material has to go on
+   the wrapper, not on the rail. Texturing the rail alone puts a seam down the
+   edge of the sheet, because the same colour then carries grain on one side of
+   it and not on the other.
+
+   The rail is therefore transparent and the desk shows through it. One
+   surface, one gradient, one grain, no seam possible. */
+
+[data-slot='sidebar-wrapper']:has([data-variant='inset']) {
+  isolation: isolate;
+  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
+  background-attachment: fixed;
+}
+
+/* Fixed rather than absolute: the grain never repaints while the page scrolls
+   under it, and it covers the viewport rather than the full document height. */
+[data-slot='sidebar-wrapper']:has([data-variant='inset'])::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  /* feColorMatrix saturate 0 is what makes it grain rather than confetti:
+     raw fractalNoise output is per-channel and reads as colour speckle. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* The desktop rail carries no fill of its own; the desk is the fill. */
+[data-slot='sidebar-wrapper']:has([data-variant='inset']) [data-slot='sidebar-inner'] {
+  background: transparent;
+}
+
+/* The content sheet has to clear the grain layer. Both are positioned with an
+   auto z-index, and the pseudo-element is last in paint order, so without this
+   the grain washes over the page. */
+[data-slot='sidebar-inset'] {
+  z-index: 1;
+}
+
+/* On a phone the sidebar is a portalled sheet, outside the wrapper, so it
+   carries the desk's material itself.
+
+   Deliberately no `position` here: the sheet primitive positions itself fixed
+   against the viewport, and overriding that drops it back into normal flow,
+   which lands it halfway down the page. `isolation` needs no position, and the
+   grain below anchors to the sheet's own fixed box. */
+[data-slot='sidebar'][data-mobile='true'] {
+  isolation: isolate;
+  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
+}
+
+/* Absolute, not fixed: fixed would spread the grain across the whole viewport
+   and haze the page behind the open sheet.
+
+   z-index -1 rather than 0, so the grain sits above the sheet's background but
+   below its content on its own. The alternative, lifting every child with
+   `> *`, also overwrites the `position: absolute` that `sr-only` depends on,
+   which drops the sheet's screen-reader title back into the flow and pushes
+   the whole nav down by the flex gap. */
+[data-slot='sidebar'][data-mobile='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+
+/* The selected row is a filled pill, not a tint. A nav rail has exactly one
+   active item, so it can afford to be the loudest thing in the column, and it
+   then matches the primary button it leads to. */
+[data-slot='sidebar-menu-button'][data-active] {
+  /* the colour goes too, not just the gradient over it: shadcn's own
+     data-active:bg-sidebar-accent is white in the light theme */
+  background-color: transparent;
+  background-image: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
+  color: var(--brand-contrast);
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.20) inset,
+    0 2px 8px oklch(20% 0.030 42 / 0.30);
+}
+
+[data-slot='sidebar-menu-button'][data-active] svg {
+  color: var(--brand-contrast);
+}
+
+/* Sub-items stay text-only: two filled pills in one open group would read as
+   two selections. The background-color has to go too, not just the gradient:
+   shadcn's own data-active:bg-sidebar-accent would otherwise leave a white
+   pill behind in the light theme. */
+[data-slot='sidebar-menu-sub-button'][data-active] {
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--brand);
+}
+
+/* ---------- 9. Form field adaptation ---------- */
 /* The field shell renders its label, description and message without a
-   className hook, so this theme's retune of the shadcn defaults - 14px
-   sentence-case labels and 12px radii - has to live here.
+   className hook, so this theme's retune of the shadcn defaults has to live
+   here.
 
    Deliberately unlayered: Tailwind utilities sit in @layer utilities, and a
    layered rule always loses to an unlayered one regardless of specificity.
@@ -403,13 +619,15 @@
   gap: 0.375rem;
 }
 
+/* Sentence case at 13px, not tracked-out caps: a long HR form is scanned by
+   reading the labels, and caps at 11px slow that down measurably. */
 [data-slot='form-item'] [data-slot='form-label'] {
   gap: 0.25rem;
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--text-mid);
 }
 
@@ -440,7 +658,7 @@
     [data-slot='combobox-chips'],
     [role='combobox']
   ) {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   border-color: var(--hairline-strong);
   background: var(--surface-2);
   font-size: 0.875rem;
@@ -464,7 +682,7 @@
 }
 
 [data-slot='form-item'] [data-slot='textarea'] {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   border-color: var(--hairline-strong);
   background: var(--surface-2);
 }

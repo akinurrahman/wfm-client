@@ -1,7 +1,6 @@
-import { CalendarRange } from 'lucide-react';
-import { useSearchParams } from 'react-router';
+﻿import { useSearchParams } from 'react-router';
 
-import { APP_NAME } from '@/constants';
+import { BrandMark } from '@/components/shared/brand-mark';
 
 import { CoverageSchematic } from '../components/coverage-schematic';
 import { LoginForm } from '../components/login-form';
@@ -29,10 +28,7 @@ export default function LoginPage() {
           {/* my-auto rather than justify-center: on a short laptop the block
               pushes the page taller instead of being clipped. */}
           <div className="mt-6 sm:mt-8 desk:my-auto desk:mt-0 desk:py-8">
-            <p className="font-mono text-[10px] tracking-[0.24em] text-text-low uppercase">
-              Workforce operations
-            </p>
-            <p className="mt-2.5 font-serif text-[1.625rem] leading-[1.08] text-text-hi sm:mt-3 sm:text-[1.875rem] desk:mt-4 desk:text-[2.5rem] desk:leading-[1.05] xl:text-[3rem]">
+            <p className="display-title text-[1.625rem] leading-[1.08] text-text-hi sm:text-[1.875rem] desk:text-[2.5rem] desk:leading-[1.05] xl:text-[3rem]">
               Every shift,
               <br />
               drawn to scale.
@@ -53,7 +49,7 @@ export default function LoginPage() {
             {CAPABILITIES.map(item => (
               <li
                 key={item}
-                className="font-mono text-[9px] tracking-[0.2em] text-text-low uppercase"
+                className="meta-label text-text-low"
               >
                 {item}
               </li>
@@ -77,10 +73,7 @@ export default function LoginPage() {
             animation: 'm-rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both',
           }}
         >
-          <p className="font-mono text-[10px] tracking-[0.24em] text-text-low uppercase">
-            Sign in
-          </p>
-          <h1 className="mt-2.5 font-serif text-[1.75rem] leading-tight text-text-hi sm:mt-3 sm:text-[2rem]">
+          <h1 className="display-title text-[1.75rem] leading-tight text-text-hi sm:text-[2rem]">
             Welcome back
           </h1>
           <p className="mt-2 text-[13px] leading-relaxed text-text-mid">
@@ -110,14 +103,5 @@ export default function LoginPage() {
 }
 
 function Wordmark() {
-  return (
-    <span className="inline-flex items-center gap-2.5 self-start">
-      <span className="m-brand-fill flex size-7 items-center justify-center rounded-md">
-        <CalendarRange className="size-4" />
-      </span>
-      <span className="font-serif text-2xl leading-none tracking-tight text-text-hi">
-        {APP_NAME}
-      </span>
-    </span>
-  );
+  return <BrandMark className="h-9 w-auto self-start object-left sm:h-10" />;
 }

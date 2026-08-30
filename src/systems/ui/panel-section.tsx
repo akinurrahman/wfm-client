@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+﻿import { cn } from '@/lib/utils';
 
 type Props = {
   title: string;
@@ -13,14 +13,16 @@ type Props = {
  *  the questions it is actually answering. Each section is one of those. */
 export function PanelSection({ title, description, action, className, children }: Props) {
   return (
-    <section className={cn('m-panel m-panel-shine p-5', className)}>
-      <div className="mb-4 flex items-center gap-3">
-        <h3 className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">{title}</h3>
-        <span aria-hidden className="h-px flex-1 bg-hairline" />
+    <section className={cn('m-panel m-panel-shine p-6', className)}>
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="display-title text-[14px] text-text-hi">{title}</h3>
+          {description ? (
+            <p className="mt-1 text-[13px] leading-relaxed text-text-mid">{description}</p>
+          ) : null}
+        </div>
         {action}
       </div>
-
-      {description ? <p className="mb-4 text-[13px] text-text-mid">{description}</p> : null}
 
       <div className="space-y-4">{children}</div>
     </section>

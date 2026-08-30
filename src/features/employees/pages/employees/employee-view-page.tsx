@@ -1,4 +1,4 @@
-import { Pencil, UserX } from 'lucide-react';
+﻿import { Pencil, UserX } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 
 import { EmptyState } from '@/components/shared/empty-state';
@@ -162,7 +162,7 @@ function IdentityStrip({ employee }: { employee: EmployeeDetail }) {
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono text-[10px] tracking-[0.14em] text-text-low uppercase">{label}</p>
+      <p className="meta-label text-text-low">{label}</p>
       <div className="mt-1">{children}</div>
     </div>
   );

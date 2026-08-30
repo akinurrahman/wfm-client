@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 import { CalendarRange, UserX } from 'lucide-react';
 
@@ -105,7 +105,7 @@ function CycleStrip({ cycle, eligibleDays }: { cycle: MonthlyCycle; eligibleDays
   return (
     <div className="m-panel m-panel-shine flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3.5">
       <span className="flex items-baseline gap-2">
-        <span className="font-mono text-[10px] tracking-[0.18em] text-text-low uppercase">
+        <span className="meta-label text-text-low">
           Cycle
         </span>
         <span data-numeric className="text-[13px] font-medium text-text-hi">
