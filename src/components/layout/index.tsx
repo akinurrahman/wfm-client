@@ -10,6 +10,8 @@ import { useSidebarStore } from '@/stores/sidebar';
 
 import { AppSidebar } from './app-sidebar';
 
+import './desk.css';
+
 type Crumb = { label: string; url?: string };
 
 const humanize = (segment: string) =>

@@ -1,0 +1,107 @@
+/* The desk.
+
+   Unlayered so it beats the Tailwind utilities the shadcn sidebar ships with.
+   Do not wrap this file in @layer.
+
+   With variant="inset" the rail is not an object sitting next to the content:
+   the wrapper paints --sidebar across the whole window and the content sheet
+   is laid on top of it with a margin all round. So the material has to go on
+   the wrapper, not on the rail. Texturing the rail alone puts a seam down the
+   edge of the sheet, because the same colour then carries grain on one side of
+   it and not on the other.
+
+   The rail is therefore transparent and the desk shows through it. One
+   surface, one gradient, one grain, no seam possible. */
+
+[data-slot='sidebar-wrapper']:has([data-variant='inset']) {
+  isolation: isolate;
+  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
+  background-attachment: fixed;
+}
+
+/* Fixed rather than absolute: the grain never repaints while the page scrolls
+   under it, and it covers the viewport rather than the full document height. */
+[data-slot='sidebar-wrapper']:has([data-variant='inset'])::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  /* feColorMatrix saturate 0 is what makes it grain rather than confetti:
+     raw fractalNoise output is per-channel and reads as colour speckle. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* The desktop rail carries no fill of its own; the desk is the fill. */
+[data-slot='sidebar-wrapper']:has([data-variant='inset']) [data-slot='sidebar-inner'] {
+  background: transparent;
+}
+
+/* The content sheet has to clear the grain layer. Both are positioned with an
+   auto z-index, and the pseudo-element is last in paint order, so without this
+   the grain washes over the page. */
+[data-slot='sidebar-inset'] {
+  z-index: 1;
+}
+
+/* On a phone the sidebar is a portalled sheet, outside the wrapper, so it
+   carries the desk's material itself.
+
+   Deliberately no `position` here: the sheet primitive positions itself fixed
+   against the viewport, and overriding that drops it back into normal flow,
+   which lands it halfway down the page. `isolation` needs no position, and the
+   grain below anchors to the sheet's own fixed box. */
+[data-slot='sidebar'][data-mobile='true'] {
+  isolation: isolate;
+  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
+}
+
+/* Absolute, not fixed: fixed would spread the grain across the whole viewport
+   and haze the page behind the open sheet.
+
+   z-index -1 rather than 0, so the grain sits above the sheet's background but
+   below its content on its own. The alternative, lifting every child with
+   `> *`, also overwrites the `position: absolute` that `sr-only` depends on,
+   which drops the sheet's screen-reader title back into the flow and pushes
+   the whole nav down by the flex gap. */
+[data-slot='sidebar'][data-mobile='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* The selected row is a filled pill, not a tint. A nav rail has exactly one
+   active item, so it can afford to be the loudest thing in the column, and it
+   then matches the primary button it leads to. */
+[data-slot='sidebar-menu-button'][data-active] {
+  /* the colour goes too, not just the gradient over it: shadcn's own
+     data-active:bg-sidebar-accent is white in the light theme */
+  background-color: transparent;
+  background-image: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
+  color: var(--brand-contrast);
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.20) inset,
+    0 2px 8px oklch(20% 0.030 42 / 0.30);
+}
+
+[data-slot='sidebar-menu-button'][data-active] svg {
+  color: var(--brand-contrast);
+}
+
+/* Sub-items stay text-only: two filled pills in one open group would read as
+   two selections. The background-color has to go too, not just the gradient:
+   shadcn's own data-active:bg-sidebar-accent would otherwise leave a white
+   pill behind in the light theme. */
+[data-slot='sidebar-menu-sub-button'][data-active] {
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--brand);
+}

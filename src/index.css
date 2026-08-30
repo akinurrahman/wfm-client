@@ -45,7 +45,6 @@
   /* charts and coverage marks. Complementary to the accent on purpose: a bar
      chart must not read as a row of primary buttons. */
   --data: oklch(70.0% 0.125 242.0);
-  --data-soft: oklch(70.0% 0.125 242.0 / 0.16);
 
   /* status. Amber is pulled to gold (hue 95) to open the gap to the accent. */
   --green: oklch(76.0% 0.150 155.0);
@@ -57,7 +56,6 @@
 
   /* depth. A product surface sits on the page, it does not float above it. */
   --lift: 0 1px 2px oklch(0% 0 0 / 0.44), 0 14px 34px oklch(8% 0.010 258 / 0.40);
-  --glow: 0 0 0 1px var(--brand-line), 0 8px 26px oklch(75% 0.148 46 / 0.14);
   --card-shine: oklch(88% 0.030 258 / 0.09);
   --scrim: oklch(9.5% 0.012 258.0 / 0.68);
 
@@ -129,7 +127,6 @@
      the accent rather than from white, which is what makes the selected row
      belong to the same system as the button it leads to. */
   --sidebar-hover: oklch(88% 0.030 258 / 0.06);
-  --sidebar-active: oklch(75% 0.148 46 / 0.13);
   --sidebar-accent: var(--sidebar-hover);
   --sidebar-accent-foreground: var(--text-hi);
   --sidebar-border: var(--hairline);
@@ -174,7 +171,6 @@
   --brand-grad-to: oklch(61.0% 0.184 38.0);
 
   --data: oklch(52.0% 0.150 245.0);
-  --data-soft: oklch(52.0% 0.150 245.0 / 0.13);
 
   --green: oklch(46.0% 0.115 155.0);
   --green-soft: oklch(46.0% 0.115 155.0 / 0.12);
@@ -187,7 +183,6 @@
      wide soft one that gives it height. One alone reads as either a sticker or
      a smudge. Both tinted from the ground, never neutral black. */
   --lift: 0 1px 2px oklch(30% 0.020 258 / 0.09), 0 12px 32px oklch(30% 0.020 258 / 0.11);
-  --glow: 0 0 0 1px var(--brand-line), 0 8px 24px oklch(60% 0.160 44 / 0.20);
   --card-shine: transparent;   /* a highlight line on white paper is only noise */
   --scrim: oklch(26.0% 0.020 258.0 / 0.26);
 
@@ -202,10 +197,8 @@
   --grain-opacity: 0.16;
   --grain-blend: multiply;
 
-  /* a nav row highlights by going lighter here, towards the sheet it opens,
-     and the selected one picks up the accent the same way dark does */
+  /* a nav row highlights by going lighter here, towards the sheet it opens */
   --sidebar-hover: oklch(100% 0 0 / 0.60);
-  --sidebar-active: oklch(66% 0.165 44 / 0.18);
 
   --destructive-foreground: oklch(99.5% 0 0);
   /* everything else re-resolves through the var() chain automatically */
@@ -252,7 +245,6 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-hover: var(--sidebar-hover);
-  --color-sidebar-active: var(--sidebar-active);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
@@ -272,7 +264,6 @@
   --color-brand-line: var(--brand-line);
   --color-brand-contrast: var(--brand-contrast);
   --color-data: var(--data);
-  --color-data-soft: var(--data-soft);
   --color-row-hover: var(--row-hover);
   --color-settled: var(--green);
   --color-settled-soft: var(--green-soft);
@@ -295,7 +286,6 @@
 
   /* shadows */
   --shadow-lift: var(--lift);
-  --shadow-glow: var(--glow);
 }
 
 /* ---------- 4. Base styles ---------- */
@@ -395,7 +385,6 @@
 
   /* every numeric element aligns */
   .tnum,
-  td[data-amount],
   [data-numeric] {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
@@ -494,210 +483,6 @@
   }
 }
 
-/* ---------- 8. The desk ---------- */
-/* Unlayered so it beats the Tailwind utilities the shadcn sidebar ships with.
-
-   With variant="inset" the rail is not an object sitting next to the content:
-   the wrapper paints --sidebar across the whole window and the content sheet
-   is laid on top of it with a margin all round. So the material has to go on
-   the wrapper, not on the rail. Texturing the rail alone puts a seam down the
-   edge of the sheet, because the same colour then carries grain on one side of
-   it and not on the other.
-
-   The rail is therefore transparent and the desk shows through it. One
-   surface, one gradient, one grain, no seam possible. */
-
-[data-slot='sidebar-wrapper']:has([data-variant='inset']) {
-  isolation: isolate;
-  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
-  background-attachment: fixed;
-}
-
-/* Fixed rather than absolute: the grain never repaints while the page scrolls
-   under it, and it covers the viewport rather than the full document height. */
-[data-slot='sidebar-wrapper']:has([data-variant='inset'])::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: var(--grain-blend);
-  /* feColorMatrix saturate 0 is what makes it grain rather than confetti:
-     raw fractalNoise output is per-channel and reads as colour speckle. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-}
-
-/* The desktop rail carries no fill of its own; the desk is the fill. */
-[data-slot='sidebar-wrapper']:has([data-variant='inset']) [data-slot='sidebar-inner'] {
-  background: transparent;
-}
-
-/* The content sheet has to clear the grain layer. Both are positioned with an
-   auto z-index, and the pseudo-element is last in paint order, so without this
-   the grain washes over the page. */
-[data-slot='sidebar-inset'] {
-  z-index: 1;
-}
-
-/* On a phone the sidebar is a portalled sheet, outside the wrapper, so it
-   carries the desk's material itself.
-
-   Deliberately no `position` here: the sheet primitive positions itself fixed
-   against the viewport, and overriding that drops it back into normal flow,
-   which lands it halfway down the page. `isolation` needs no position, and the
-   grain below anchors to the sheet's own fixed box. */
-[data-slot='sidebar'][data-mobile='true'] {
-  isolation: isolate;
-  background-image: linear-gradient(180deg, var(--sidebar-top), var(--sidebar) 52%);
-}
-
-/* Absolute, not fixed: fixed would spread the grain across the whole viewport
-   and haze the page behind the open sheet.
-
-   z-index -1 rather than 0, so the grain sits above the sheet's background but
-   below its content on its own. The alternative, lifting every child with
-   `> *`, also overwrites the `position: absolute` that `sr-only` depends on,
-   which drops the sheet's screen-reader title back into the flow and pushes
-   the whole nav down by the flex gap. */
-[data-slot='sidebar'][data-mobile='true']::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: var(--grain-blend);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-}
 
 
-/* The selected row is a filled pill, not a tint. A nav rail has exactly one
-   active item, so it can afford to be the loudest thing in the column, and it
-   then matches the primary button it leads to. */
-[data-slot='sidebar-menu-button'][data-active] {
-  /* the colour goes too, not just the gradient over it: shadcn's own
-     data-active:bg-sidebar-accent is white in the light theme */
-  background-color: transparent;
-  background-image: linear-gradient(180deg, var(--brand-grad-from), var(--brand-grad-to));
-  color: var(--brand-contrast);
-  box-shadow:
-    0 1px 0 oklch(100% 0 0 / 0.20) inset,
-    0 2px 8px oklch(20% 0.030 42 / 0.30);
-}
 
-[data-slot='sidebar-menu-button'][data-active] svg {
-  color: var(--brand-contrast);
-}
-
-/* Sub-items stay text-only: two filled pills in one open group would read as
-   two selections. The background-color has to go too, not just the gradient:
-   shadcn's own data-active:bg-sidebar-accent would otherwise leave a white
-   pill behind in the light theme. */
-[data-slot='sidebar-menu-sub-button'][data-active] {
-  background-image: none;
-  background-color: transparent;
-  box-shadow: none;
-  color: var(--brand);
-}
-
-/* ---------- 9. Form field adaptation ---------- */
-/* The field shell renders its label, description and message without a
-   className hook, so this theme's retune of the shadcn defaults has to live
-   here.
-
-   Deliberately unlayered: Tailwind utilities sit in @layer utilities, and a
-   layered rule always loses to an unlayered one regardless of specificity.
-   Scoped to a form item so the toolbar's search box and filter selects keep
-   their own compact sizing. */
-
-[data-slot='form-item'] {
-  /* Grid rows are content-sized, but a stretched grid item spreads its leftover
-     height across them. In a two-column row that pushes the shorter field's
-     label off the baseline its neighbour sets. */
-  align-content: start;
-  gap: 0.375rem;
-}
-
-/* Sentence case at 13px, not tracked-out caps: a long HR form is scanned by
-   reading the labels, and caps at 11px slow that down measurably. */
-[data-slot='form-item'] [data-slot='form-label'] {
-  gap: 0.25rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--text-mid);
-}
-
-/* The asterisk carries its own ml-1, which the label's flex gap would double. */
-[data-slot='form-item'] [data-slot='form-label'] > span {
-  margin-left: 0;
-}
-
-[data-slot='form-item'] [data-slot='form-description'] {
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--text-low);
-}
-
-[data-slot='form-item'] [data-slot='form-message'] {
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--red);
-}
-
-/* One skin for every control a field can hold, so a row never mixes two corner
-   radii or two backgrounds. */
-[data-slot='form-item']
-  :is(
-    input:not([type='checkbox'], [data-slot='combobox-input']),
-    [data-slot='select-trigger'],
-    [data-slot='date-picker-trigger'],
-    [data-slot='combobox-chips'],
-    [role='combobox']
-  ) {
-  border-radius: var(--radius-md);
-  border-color: var(--hairline-strong);
-  background: var(--surface-2);
-  font-size: 0.875rem;
-}
-
-/* 40px is the touch target, dropping to the 36px desktop scale from sm up. */
-[data-slot='form-item']
-  :is(
-    input:not([type='checkbox'], [data-slot='combobox-input']),
-    [data-slot='select-trigger'],
-    [data-slot='date-picker-trigger']
-  ) {
-  height: 2.5rem;
-}
-
-/* The multi select grows with its chips, so it gets a floor rather than a
-   height - pinning it would clip the second row of selections. */
-[data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
-  min-height: 2.5rem;
-  height: auto;
-}
-
-[data-slot='form-item'] [data-slot='textarea'] {
-  border-radius: var(--radius-md);
-  border-color: var(--hairline-strong);
-  background: var(--surface-2);
-}
-
-@media (width >= 40rem) {
-  [data-slot='form-item']
-    :is(
-      input:not([type='checkbox'], [data-slot='combobox-input']),
-      [data-slot='select-trigger'],
-      [data-slot='date-picker-trigger']
-    ) {
-    height: 2.25rem;
-  }
-
-  [data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
-    min-height: 2.25rem;
-  }
-}

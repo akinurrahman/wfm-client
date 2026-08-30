@@ -1,0 +1,101 @@
+/* Field shell adaptation.
+
+   The field shell renders its label, description and message without a
+   className hook, so this theme's retune of the shadcn defaults has to live in
+   CSS rather than on the components.
+
+   Deliberately unlayered: Tailwind utilities sit in @layer utilities, and a
+   layered rule always loses to an unlayered one regardless of specificity. Do
+   not wrap this file in @layer. Scoped to a form item so the toolbar's search
+   box and filter selects keep their own compact sizing. */
+
+[data-slot='form-item'] {
+  /* Grid rows are content-sized, but a stretched grid item spreads its leftover
+     height across them. In a two-column row that pushes the shorter field's
+     label off the baseline its neighbour sets. */
+  align-content: start;
+  gap: 0.375rem;
+}
+
+/* Sentence case at 13px, not tracked-out caps: a long HR form is scanned by
+   reading the labels, and caps at 11px slow that down measurably. */
+[data-slot='form-item'] [data-slot='form-label'] {
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-mid);
+}
+
+/* The asterisk carries its own ml-1, which the label's flex gap would double. */
+[data-slot='form-item'] [data-slot='form-label'] > span {
+  margin-left: 0;
+}
+
+[data-slot='form-item'] [data-slot='form-description'] {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-low);
+}
+
+[data-slot='form-item'] [data-slot='form-message'] {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--red);
+}
+
+/* One skin for every control a field can hold, so a row never mixes two corner
+   radii or two backgrounds. */
+[data-slot='form-item']
+  :is(
+    input:not([type='checkbox'], [data-slot='combobox-input']),
+    [data-slot='select-trigger'],
+    [data-slot='date-picker-trigger'],
+    [data-slot='combobox-chips'],
+    [role='combobox']
+  ) {
+  border-radius: var(--radius-md);
+  border-color: var(--hairline-strong);
+  background: var(--surface-2);
+  font-size: 0.875rem;
+}
+
+/* 40px is the touch target, dropping to the 36px desktop scale from sm up. */
+[data-slot='form-item']
+  :is(
+    input:not([type='checkbox'], [data-slot='combobox-input']),
+    [data-slot='select-trigger'],
+    [data-slot='date-picker-trigger']
+  ) {
+  height: 2.5rem;
+}
+
+/* The multi select grows with its chips, so it gets a floor rather than a
+   height - pinning it would clip the second row of selections. */
+[data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
+  min-height: 2.5rem;
+  height: auto;
+}
+
+[data-slot='form-item'] [data-slot='textarea'] {
+  border-radius: var(--radius-md);
+  border-color: var(--hairline-strong);
+  background: var(--surface-2);
+}
+
+@media (width >= 40rem) {
+  [data-slot='form-item']
+    :is(
+      input:not([type='checkbox'], [data-slot='combobox-input']),
+      [data-slot='select-trigger'],
+      [data-slot='date-picker-trigger']
+    ) {
+    height: 2.25rem;
+  }
+
+  [data-slot='form-item'] :is([role='combobox'], [data-slot='combobox-chips']) {
+    min-height: 2.25rem;
+  }
+}
