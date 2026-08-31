@@ -2,17 +2,16 @@ import { useMemo, useState } from 'react';
 
 import { Link } from 'react-router';
 
-import { CalendarCheck, ChevronLeft, ChevronRight, Settings2, X } from 'lucide-react';
+import { CalendarCheck, Settings2, X } from 'lucide-react';
 
 import { EmptyState } from '@/components/shared/empty-state';
 import { ErrorState } from '@/components/shared/error-state';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
-import { DatePicker } from '@/components/ui/date-picker';
 import { formatDate } from '@/lib/format';
-import { shiftCalendarDate, todayCalendarDate } from '@/lib/time';
 import { useUrlFilters } from '@/systems/filters';
 import { DataTable } from '@/systems/table/data-table';
+import { DateStepper } from '@/systems/ui/date-stepper';
 import { FilterBar } from '@/systems/ui/filter-bar';
 
 import { useRoster } from '../../api/attendance.queries';
@@ -65,7 +64,6 @@ export default function RosterPage() {
   );
 
   const selectedRows = rows.filter(row => selectedIds.includes(row.employee.id));
-  const isToday = filters.date === todayCalendarDate();
 
   return (
     <div className="pb-4">
@@ -93,7 +91,7 @@ export default function RosterPage() {
             <DateStepper
               value={filters.date}
               onChange={date => setFilter('date', date)}
-              isToday={isToday}
+              ariaLabel="Roster date"
             />
           </FilterBar>
 
@@ -157,60 +155,6 @@ export default function RosterPage() {
         row={auditRow}
         onOpenChange={open => setAuditRow(open ? auditRow : null)}
       />
-    </div>
-  );
-}
-
-/** The roster is a day at a time, and HR walks it forwards. Stepping beats
- *  reopening a calendar for every one of them, so the picker keeps its place
- *  for the jumps and the arrows carry the routine. */
-function DateStepper({
-  value,
-  onChange,
-  isToday,
-}: {
-  value: string;
-  onChange: (date: string) => void;
-  isToday: boolean;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <Button
-        variant="outline"
-        size="icon"
-        aria-label="Previous day"
-        onClick={() => onChange(shiftCalendarDate(value, -1))}
-        className="size-10 sm:size-8"
-      >
-        <ChevronLeft />
-      </Button>
-
-      <DatePicker
-        date={value}
-        onDateChange={next => onChange(next ?? todayCalendarDate())}
-        ariaLabel="Roster date"
-        className="h-10 w-auto min-w-52 sm:h-8"
-      />
-
-      <Button
-        variant="outline"
-        size="icon"
-        aria-label="Next day"
-        onClick={() => onChange(shiftCalendarDate(value, 1))}
-        className="size-10 sm:size-8"
-      >
-        <ChevronRight />
-      </Button>
-
-      {/* Kept on the same baseline as the controls: a caption stacked under the
-          picker makes the arrows centre against a two-line block. */}
-      <span className="text-[12px] text-text-low">{formatDate(value, 'EEEE')}</span>
-
-      {isToday ? null : (
-        <Button variant="ghost" size="sm" onClick={() => onChange(todayCalendarDate())}>
-          Today
-        </Button>
-      )}
     </div>
   );
 }

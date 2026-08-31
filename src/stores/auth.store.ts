@@ -11,7 +11,7 @@ interface AuthState {
   isLoggedIn: boolean;
   isAuthInitialized: boolean;
 
-  setTokens: (tokens: Tokens) => void;
+  setSession: (tokens: Tokens, user: AuthUser) => void;
   setUser: (user: AuthUser) => void;
   updateTokens: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
@@ -27,16 +27,17 @@ export const useAuthStore = create<AuthState>()(
         isLoggedIn: false,
         isAuthInitialized: false,
 
-        // Login returns tokens only. The identity arrives separately from
-        // /auth/me, so the store fills in two steps.
-        setTokens: tokens => {
+        setSession: (tokens, user) => {
           set({
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
+            user,
             isLoggedIn: true,
           });
         },
 
+        // /auth/me re-reads the same shape on every boot, so a role or
+        // designation changed since login lands here without a re-login.
         setUser: user => {
           set({ user });
         },

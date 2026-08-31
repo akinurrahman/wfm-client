@@ -13,6 +13,12 @@ export const SIDEBAR_ITEMS = (): SidebarGroup[] => [
         roles: [ROLE.SITE_ADMIN],
       },
       {
+        title: "My dashboard",
+        url: "/my-dashboard",
+        icon: "LayoutDashboard",
+        roles: [ROLE.EMPLOYEE],
+      },
+      {
         title: "My profile",
         url: "/profile",
         icon: "UserCircle",

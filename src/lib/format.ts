@@ -9,6 +9,22 @@ export const getInitials = (fullName: string | undefined) => {
     .toUpperCase();
 };
 
+/** The JWT payload carries no display name, so the email local part is the most
+ *  human handle an account has. Title cased here rather than by a `capitalize`
+ *  class, so a caller can use the words in a sentence. */
+export const displayNameFromEmail = (email: string | undefined) => {
+  if (!email) return 'there';
+
+  return email
+    .split('@')[0]
+    .replace(/[._-]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .map(word => word[0].toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export const formatDate = (date?: string | number | Date, dateFormat?: string) => {
   if (!date) return '-';
   const parsedDate = new Date(date);

@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useLogout } from '@/features/auth';
-import { getInitials } from '@/lib';
+import { displayNameFromEmail, getInitials } from '@/lib';
 import { useAuthStore } from '@/stores/auth.store';
 
 const MODES: { value: string; label: string; hint: string; icon: LucideIcon }[] = [
@@ -35,9 +35,9 @@ export function UserMenu() {
     const { state, isMobile } = useSidebar();
     const collapsed = state === 'collapsed' && !isMobile;
 
-    // The token payload carries no display name, so the email local part is the
-    // most human handle available.
-    const fullName = user ? user.email.split('@')[0].replace(/[._-]+/g, ' ') : 'Guest User';
+    const fullName = user
+        ? (user.fullName ?? displayNameFromEmail(user.email))
+        : 'Guest User';
     const email = user?.email ?? 'not signed in';
 
     const activeMode = MODES.find(mode => mode.value === theme) ?? MODES[1];

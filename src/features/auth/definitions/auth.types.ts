@@ -8,6 +8,10 @@ export type LoginPayload = {
   password: string;
 };
 
+export type LoginResult = Tokens & {
+  user: AuthUser;
+};
+
 export type LogoutPayload = {
   refreshToken: string;
 };

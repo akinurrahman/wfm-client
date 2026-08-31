@@ -33,14 +33,16 @@ export type Tokens = {
   refreshToken: string;
 };
 
-/** What `/auth/me` returns: the decoded JWT payload, not a user record. Lives in
+/** The signed-in identity, returned by both `/auth/login` and `/auth/me`. The
+ *  employee fields are null for an account with no employee record yet. Lives in
  *  lib because the refresh interceptor and the auth store both need it and
  *  neither may import a feature. */
 export type AuthUser = {
-  sub: string;
+  id: string;
   email: string;
   role: UserRole;
-  employeeId?: string;
-  iat: number;
-  exp: number;
+  employeeId: string | null;
+  employeeCode: string | null;
+  fullName: string | null;
+  designation: string | null;
 };

@@ -16,8 +16,11 @@ export function useLogin() {
     // in a toast that floats away while they retype.
     onError: () => {},
     onSuccess: res => {
-      useAuthStore.getState().setTokens(res.data);
-      qc.invalidateQueries({ queryKey: AUTH_KEYS.me() });
+      const { user, ...tokens } = res.data;
+      useAuthStore.getState().setSession(tokens, user);
+      // Login already carries the /auth/me payload, so seeding the cache spares
+      // a duplicate request the moment the query switches on.
+      qc.setQueryData(AUTH_KEYS.me(), { ...res, data: user });
       toast.success('Signed in');
     },
   });
